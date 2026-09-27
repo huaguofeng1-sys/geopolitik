@@ -1,0 +1,4024 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Primera Página Web</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+  --fondo: #f4f5f7;
+  --fondo-claro: #ffffff;
+  --texto: #111827;
+  --texto-suave: #6b7280;
+  --panel: #ffffff;
+  --borde: #e3e6ea;
+
+  --barra: #14171c;
+  --barra-borde: #2a2f38;
+  --acento: #1256a0;
+  --sube: #0f8a4f;
+  --baja: #c62828;
+
+  --usd: #2f7d5b;
+  --eur: #2b4c9b;
+  --jpy: #b23a48;
+  --gbp: #6b3fa0;
+  --cny: #b8700a;
+
+  --velocidad: 28s;
+}
+
+    * { box-sizing: border-box; }
+
+    body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+
+.barra {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1rem;
+  background: var(--barra);
+  border-bottom: 1px solid var(--barra-borde);
+}
+
+.logo {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  height: 3rem;
+  width: 8rem;
+  object-fit: fill;
+  display: block;
+}
+
+/* ============ .menu (carrusel de monedas) ============ */
+.menu {
+  flex: 1;
+  min-width: 0;          /* permite que el carrusel se encoja junto al logo */
+  overflow: hidden;
+  padding: 0.35rem 0;    /* antes 1.25rem, aquí está la reducción en altura */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+    .menu__pista {
+      display: flex;
+      width: max-content;
+      animation: desplazar var(--velocidad) linear infinite;
+    }
+
+    .menu:hover .menu__pista,
+    .menu:focus-within .menu__pista {
+      animation-play-state: paused;
+    }
+
+    .menu__grupo {
+      display: flex;
+      flex-shrink: 0;
+      justify-content: space-around;
+      align-items: center;
+      gap: 1rem;
+      min-width: 100vw;
+      padding-right: 1rem;
+      margin: 0;
+      list-style: none;
+    }
+
+    @keyframes desplazar {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    .menu__boton {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.3rem 1rem 0.3rem 0.3rem;
+      background: var(--panel);
+      border: 1px solid var(--borde);
+      border-radius: 999px;
+      font: inherit;
+      color: var(--texto);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .menu__boton:hover {
+      transform: translateY(-2px);
+      border-color: var(--texto);
+    }
+
+    .menu__boton:focus-visible {
+      outline: 3px solid var(--texto);
+      outline-offset: 3px;
+    }
+
+    .menu__ficha {
+      display: grid;
+      place-items: center;
+      width: 1.9rem;
+      height: 1.9rem;
+      border-radius: 50%;
+      background: var(--color, var(--texto));
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .menu__texto {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      line-height: 1.2;
+    }
+
+    .menu__nombre { font-size: 0.85rem; font-weight: 700; }
+    .menu__codigo { font-size: 0.7rem; font-weight: 500; color: var(--texto-suave); }
+
+    .menu__boton[data-moneda="dolar"] { --color: var(--usd); }
+    .menu__boton[data-moneda="euro"]  { --color: var(--eur); }
+    .menu__boton[data-moneda="yen"]   { --color: var(--jpy); }
+    .menu__boton[data-moneda="libra"] { --color: var(--gbp); }
+    .menu__boton[data-moneda="yuan"]  { --color: var(--cny); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .menu {
+        overflow-x: auto;
+        -webkit-mask-image: none;
+                mask-image: none;
+      }
+      .menu__pista { animation: none; }
+      .menu__grupo[aria-hidden="true"] { display: none; }
+      .menu__grupo { min-width: max-content; padding-inline: 1rem; }
+    }
+
+.logo {
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 0.35rem 0;
+}
+
+.menu__boton {
+  background: #1d2129;
+  border: 1px solid var(--barra-borde);
+  border-radius: 8px;
+  color: #f3f4f6;
+}
+
+.menu__boton:hover { border-color: #8b94a3; }
+.menu__boton:focus-visible { outline-color: #fff; }
+.menu__codigo { color: #9ca3af; }
+
+    /* ============ contenido ============ */
+    main {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 4rem;
+}
+
+    h1 {
+  font-family: inherit;
+  font-weight: 700;
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  letter-spacing: -0.02em;
+  margin: 0 0 0.35rem;
+}
+
+    /* ============ cabecera del contenido y barra de acciones ============ */
+.hero {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--borde);
+}
+
+.hero__titulo { flex-shrink: 0; }
+
+.hero__titulo p {
+  margin: 0;
+  color: var(--texto-suave);
+  font-size: 1rem;
+}
+
+.briefing {
+  margin: 0 0 2rem;
+  padding: 1.1rem 1.25rem;
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-left: 4px solid var(--acento);
+  border-radius: 10px;
+}
+
+.briefing h2 {
+  margin: 0 0 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--acento);
+}
+
+.briefing__texto {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--texto);
+}
+
+.ticker {
+  --velocidad-ticker: 40s;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0.7rem 0;
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.ticker__pista {
+  display: flex;
+  width: max-content;
+  animation: desplazar-inverso var(--velocidad-ticker) linear infinite;
+}
+
+.ticker:hover .ticker__pista { animation-play-state: paused; }
+
+.ticker__pista--estatica {
+  animation: none;
+  padding: 0 1rem;
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+}
+
+/* sentido contrario al carrusel de monedas, que va hacia la izquierda */
+@keyframes desplazar-inverso {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+.ticker__grupo { display: flex; flex-shrink: 0; }
+
+.ticker__item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0 1.25rem;
+  border-right: 1px solid var(--borde);
+  white-space: nowrap;
+}
+
+.ticker__simbolo { font-size: 0.85rem; font-weight: 700; }
+.ticker__nombre  { font-size: 0.75rem; color: var(--texto-suave); }
+.ticker__precio  { font-size: 0.9rem; font-weight: 600; }
+.ticker__cambio  { font-size: 0.8rem; font-weight: 600; color: var(--texto-suave); }
+.ticker__cambio.sube { color: var(--sube); }
+.ticker__cambio.baja { color: var(--baja); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
+  .ticker__pista { animation: none; }
+  .ticker__grupo[aria-hidden="true"] { display: none; }
+}
+
+.contenido {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 2rem;
+  align-items: start;
+}
+
+     .cuadro { transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+
+     .cuadro.resaltado {
+  border-color: var(--texto);
+  box-shadow: 0 0 0 4px var(--borde);
+}
+
+     .cuadro--ancho { grid-column: 1 / -1; }
+     .cuadro .lienzo--alto { height: 300px; }
+
+/* ============ selector de periodo ============ */
+.tendencias h2,
+.noticias h2 {
+  margin: 0 0 1rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.periodos {
+  display: inline-flex;
+  margin-bottom: 1.25rem;
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.periodos button {
+  padding: 0.45rem 0.95rem;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--texto-suave);
+  cursor: pointer;
+}
+
+.periodos button + button { border-left: 1px solid var(--borde); }
+.periodos button:hover { color: var(--texto); }
+.periodos button.activo { background: var(--texto); color: #fff; }
+
+/* ============ tarjetas de monedas ============ */
+.cuadro {
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+}
+
+.cuadro.resaltado {
+  border-color: var(--acento);
+  box-shadow: 0 0 0 3px rgba(18, 86, 160, 0.2);
+}
+
+.cuadro h3 {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.cuadro h3 span {
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--texto-suave);
+}
+
+.cifra { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; }
+.cifra small { font-size: 0.75rem; font-weight: 500; letter-spacing: 0; color: var(--texto-suave); }
+
+.variacion { margin: 0.15rem 0 0.75rem; font-size: 0.8rem; color: var(--texto-suave); }
+.variacion.sube { color: var(--sube); font-weight: 600; }
+.variacion.baja { color: var(--baja); font-weight: 600; }
+
+.lienzo { position: relative; height: 170px; }
+
+/* ============ panel de noticias ============ */
+.noticias {
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+  scrollbar-width: thin;
+  scrollbar-color: #c9ced6 transparent;
+}
+
+.noticia__titulo { font-weight: 600; }
+.noticia:hover .noticia__titulo { color: var(--acento); text-decoration: none; }
+
+     /* ============ desplegable de monedas ============ */
+.menu.pausado .menu__pista {
+  animation-play-state: paused;
+}
+
+.desplegable {
+  position: fixed;
+  z-index: 100;
+  padding-top: 6px;               /* puente invisible entre el botón y la lista */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+}
+
+.desplegable.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.desplegable__cuadro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.5rem 1rem;
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-top-width: 0;
+  text-align: left;
+  min-width: 190px;
+}
+
+.desplegable__cuadro:first-child {
+  border-top-width: 1px;
+  border-radius: 12px 12px 0 0;
+}
+
+.desplegable__cuadro:last-child {
+  border-radius: 0 0 12px 12px;
+}
+
+.desplegable__cuadro span {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--texto-suave);
+}
+
+.desplegable__cuadro strong {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--texto);
+}
+
+ /* ============ dos columnas: tendencias a la izquierda, noticias a la derecha ============ */
+.contenido {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 2rem;
+  align-items: start;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.tendencias { min-width: 0; }
+
+.noticias {
+  text-align: left;
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  padding: 1rem;
+  position: sticky;
+  top: 1rem;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+}
+
+.noticias h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+}
+
+.noticia {
+  display: block;
+  padding: 0.7rem 0;
+  border-top: 1px solid var(--borde);
+  color: var(--texto);
+  text-decoration: none;
+}
+
+.noticia:first-child { border-top: 0; }
+
+.noticia:hover .noticia__titulo { text-decoration: underline; }
+
+.noticia__titulo {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.noticia__meta {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--texto-suave);
+}
+
+/* el botón, el fondo y la cabecera solo se ven en pantallas pequeñas */
+.noticias__boton,
+.noticias__fondo,
+.noticias__cerrar { display: none; }
+
+.noticias__cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+/* ============ asistente de IA ============ */
+.chat__boton {
+  position: fixed;
+  left: 1rem;
+  bottom: 1rem;
+  z-index: 150;
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 50%;
+  border: 1px solid var(--borde);
+  background: var(--texto);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.chat {
+  position: fixed;
+  left: 1rem;
+  bottom: 5rem;
+  z-index: 160;
+  display: flex;
+  flex-direction: column;
+  width: min(92vw, 360px);
+  height: min(70vh, 480px);
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  text-align: left;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+}
+
+.chat.abierto {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.chat__cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--borde);
+}
+
+.chat__cerrar {
+  background: none;
+  border: 0;
+  font-size: 1.1rem;
+  color: var(--texto);
+  cursor: pointer;
+}
+
+.chat__mensajes {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.chat__msg {
+  max-width: 85%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.chat__msg--ia { align-self: flex-start; background: #fff; }
+.chat__msg--yo { align-self: flex-end; background: var(--texto); color: #fff; }
+
+.chat__entrada {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.6rem;
+  border-top: 1px solid var(--borde);
+}
+
+.chat__entrada input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+.chat__entrada button {
+  padding: 0.5rem 0.9rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--texto);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.chat__entrada button:disabled { opacity: 0.5; cursor: wait; }
+
+@media (max-width: 900px) {
+  .contenido { grid-template-columns: 1fr; }
+
+  /* el panel pasa a ser un cajón lateral */
+  .noticias {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    max-height: none;
+    width: min(85vw, 340px);
+    border-radius: 16px 0 0 16px;
+    z-index: 200;
+    transform: translateX(100%);
+    visibility: hidden;
+    transition: transform 0.3s ease, visibility 0.3s;
+    padding-top: env(safe-area-inset-top, 1rem);
+  }
+
+  .noticias.abierto {
+    transform: translateX(0);
+    visibility: visible;
+  }
+
+  /* pestaña pegada al borde derecho */
+  .noticias__boton {
+    display: block;
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 150;
+    padding: 0.9rem 0.5rem;
+    background: var(--panel);
+    color: var(--texto);
+    border: 1px solid var(--borde);
+    border-right: 0;
+    border-radius: 12px 0 0 12px;
+    font: inherit;
+    font-weight: 700;
+    font-size: 0.85rem;
+    writing-mode: vertical-rl;
+    cursor: pointer;
+  }
+
+  .noticias__cerrar {
+    display: block;
+    background: none;
+    border: 0;
+    font-size: 1.2rem;
+    color: var(--texto);
+    cursor: pointer;
+  }
+
+  /* capa oscura detrás del cajón */
+  .noticias__fondo {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 190;
+    background: rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s;
+  }
+
+  .noticias__fondo.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+} 
+
+.tarjeta {
+  position: relative;
+  display: block;
+  width: 100%; height: 100%;
+  overflow: hidden;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: linear-gradient(160deg, #2a3140, #14171c);
+  color: #fff;
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.08);
+}
+
+.tarjeta:focus-visible { outline: 3px solid var(--acento); outline-offset: 3px; }
+
+.tarjeta__imagen {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.tarjeta:hover .tarjeta__imagen { transform: scale(1.05); }
+
+/* degradado para que el texto se lea sobre cualquier imagen */
+.tarjeta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10, 12, 16, 0.92) 0%, rgba(10, 12, 16, 0.5) 45%, rgba(10, 12, 16, 0) 75%);
+}
+
+.tarjeta__etiqueta {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 1;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--texto);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.tarjeta__play::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 54%;
+  transform: translate(-50%, -50%);
+  border-style: solid;
+  border-width: 0.45rem 0 0.45rem 0.75rem;
+  border-color: transparent transparent transparent #fff;
+}
+
+.tarjeta__texto {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.9rem;
+}
+
+.tarjeta--principal .tarjeta__titulo { font-size: 1.5rem; line-height: 1.2; }
+
+.tarjeta__fecha { font-size: 0.72rem; color: rgba(255, 255, 255, 0.75); }
+
+/* ============ ventana del reproductor ============ */
+.visor {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.visor.abierto { display: flex; }
+
+.visor__caja {
+  width: min(960px, 100%);
+  overflow: hidden;
+  border-radius: 10px;
+  background: #000;
+}
+
+.visor__marco { position: relative; aspect-ratio: 16 / 9; }
+
+.visor__marco iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.visor__pie {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0.9rem;
+  background: var(--barra);
+  font-size: 0.85rem;
+}
+
+.visor__pie a { color: #8fb8ff; }
+
+.visor__cerrar {
+  border: 0;
+  background: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .hero { flex-direction: column; align-items: stretch; gap: 1rem; }
+}
+
+/* ============ mosaico: noticias intercaladas con monedas ============ */
+.tendencias { container-type: inline-size; }
+
+#comparativo-caja:not(:empty) { margin-top: 1rem; }
+
+.mosaico__aviso {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  color: var(--texto-suave);
+}
+
+.mosaico {
+  --alto-celda: 300px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-auto-rows: var(--alto-celda);
+  gap: 1rem;
+}
+
+.mosaico > .cuadro {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.mosaico > .cuadro .lienzo {
+  flex: 1;
+  min-height: 0;
+  height: auto;
+}
+
+/* 3 columnas si hay espacio; si no, 1 columna (siguen alternadas) */
+@container (min-width: 640px) {
+  .mosaico { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* ============ mapa de contagio financiero ============ */
+.contagio { margin: 2.5rem 0; }
+
+.contagio h2 { margin: 0 0 0.4rem; font-size: 1.05rem; font-weight: 700; }
+
+.contagio__ayuda { margin: 0 0 1rem; font-size: 0.85rem; color: var(--texto-suave); }
+
+.contagio__control {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.contagio__control select {
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: var(--panel);
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--texto);
+}
+
+.contagio__filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.filtro-categoria {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--texto-suave);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.15s ease, border-color 0.15s ease;
+}
+
+.filtro-categoria.activo {
+  opacity: 1;
+  border-color: var(--texto);
+  color: var(--texto);
+}
+
+.umbral-control {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  font-size: 0.82rem;
+  color: var(--texto-suave);
+}
+.umbral-control input[type="range"] { accent-color: var(--acento); }
+
+/* nodos y aristas ocultados por el filtro de categoría */
+.nodo-correlacion.filtrado { opacity: 0.12; pointer-events: none; }
+.arista-correlacion.filtrada { opacity: 0.02 !important; }
+
+.nodo-correlacion.fuera-cartera { opacity: 0.08; pointer-events: none; }
+.arista-correlacion.fuera-cartera { opacity: 0.02 !important; }
+
+.anillo-favorito {
+  fill: none;
+  stroke: #f5b700;
+  stroke-width: 2;
+  stroke-dasharray: 3 3;
+  pointer-events: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.contagio__signo {
+  display: inline-flex;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.shock-signo {
+  padding: 0.5rem 0.8rem;
+  border: 0;
+  background: var(--panel);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--texto-suave);
+  cursor: pointer;
+}
+
+.shock-signo + .shock-signo { border-left: 1px solid var(--borde); }
+.shock-signo.activo { background: var(--texto); color: #fff; }
+
+#shock-boton {
+  padding: 0.55rem 1rem;
+  border: 0;
+  border-radius: 8px;
+  background: var(--acento);
+  color: #fff;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#shock-reset {
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--texto-suave);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+#cartera-boton {
+  padding: 0.55rem 0.9rem;
+  border: 1px solid #e8c34a;
+  border-radius: 8px;
+  background: #fffaf0;
+  color: #926a00;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+#cartera-boton.activo { background: #f5b700; color: #3a2a00; border-color: #d99e00; }
+.cartera { margin: 0 0 1.25rem; }
+.cartera h3 { margin: 0 0 0.4rem; font-size: 1rem; font-weight: 700; }
+.cartera__ayuda { margin: 0 0 0.9rem; font-size: 0.82rem; color: var(--texto-suave); }
+
+.cartera__control {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.cartera__control select, .cartera__control input {
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: var(--panel);
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--texto);
+}
+.cartera__control input { width: 160px; }
+#cartera-agregar {
+  padding: 0.5rem 0.9rem;
+  border: 0;
+  border-radius: 8px;
+  background: var(--acento);
+  color: #fff;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cartera__vacio { font-size: 0.85rem; color: var(--texto-suave); }
+
+.cartera-item {
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.6rem;
+}
+.cartera-item__cabecera {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.3rem;
+}
+.cartera-item__semaforo { font-size: 0.85rem; font-weight: 700; }
+.cartera-item__nombre { flex: 1; font-weight: 700; font-size: 0.9rem; }
+.cartera-item__quitar {
+  border: 0;
+  background: none;
+  color: var(--texto-suave);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.cartera-item__monto { font-size: 0.8rem; color: var(--texto-suave); margin-bottom: 0.25rem; }
+.cartera-item__detalle { font-size: 0.85rem; margin-bottom: 0.25rem; }
+.cartera-item__factores { font-size: 0.78rem; color: var(--texto-suave); }
+
+.contagio__resultado {
+  margin: 1rem 0 0;
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+  min-height: 1.2em;
+}
+
+/* ============ animación del shock ============ */
+@keyframes pulso-nodo-circulo {
+  0%   { r: 26; }
+  40%  { r: 34; }
+  100% { r: 26; }
+}
+@keyframes pulso-nodo-poligono {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+@keyframes flujo-arista {
+  to { stroke-dashoffset: -20; }
+}
+
+.nodo-nucleo.shock-origen .nodo-forma {
+  stroke: #f5b700;
+  animation: pulso-nodo-circulo 0.9s ease-out;
+}
+.nodo-periferia.shock-origen .nodo-forma {
+  stroke: #f5b700;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pulso-nodo-poligono 0.9s ease-out;
+}
+
+.nodo-correlacion.shock-positivo .nodo-forma { fill: var(--sube); }
+.nodo-correlacion.shock-negativo .nodo-forma { fill: var(--baja); }
+
+.nodo-correlacion.shock-neutro .nodo-forma { opacity: 0.35; }
+
+.arista-correlacion.shock-camino {
+  stroke-width: 4 !important;
+  opacity: 0.9 !important;
+}
+
+.arista-correlacion.shock-otras { opacity: 0.03 !important; }
+
+.comparador {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+}
+
+.comparador label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.comparador select {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: var(--panel);
+  font: inherit;
+  font-size: 0.82rem;
+  color: var(--texto);
+}
+
+.comparador button {
+  padding: 0.45rem 0.85rem;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--texto);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#comparador-boton { background: var(--acento); color: #fff; border-color: var(--acento); }
+
+.comparador__resultado {
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+}
+
+.comparador__lista {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.25rem;
+}
+
+.comparador__lista li strong { font-weight: 700; }
+.comparador__sube { color: var(--sube); }
+.comparador__baja { color: var(--baja); }
+
+.arista-correlacion.cambio-fuerte { stroke-dasharray: 2 3; }
+
+.alertas-contagio { margin: 0 0 1rem; }
+
+.alerta-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.6rem 0.8rem;
+  margin-bottom: 0.4rem;
+  background: #fff7ed;
+  border: 1px solid #fcd9a8;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.alerta-item__icono { flex-shrink: 0; font-size: 1rem; }
+
+.alerta-item__texto { flex: 1; }
+.alerta-item__detalle { display: block; margin-top: 0.15rem; font-size: 0.78rem; color: var(--texto-suave); }
+
+.alertas-contagio__vacio { font-size: 0.85rem; color: var(--texto-suave); }
+
+.contagio__envoltorio {
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+}
+
+.mapa-zoom-controles {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.boton-geografia {
+  padding: 0.45rem 0.9rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--texto-suave);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.boton-geografia.activo { background: var(--texto); color: #fff; border-color: var(--texto); }
+
+.feature-geo { pointer-events: auto; cursor: help; }
+.feature-geo path,
+.feature-geo line,
+.feature-geo polyline { stroke: #6b5842; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.feature-geo .relleno-suave { fill: #6b5842; fill-opacity: 0.12; stroke: none; }
+
+.feature-geo:hover path,
+.feature-geo:hover line,
+.feature-geo:hover polyline { stroke: #1256a0; }
+.feature-geo:hover .relleno-suave { fill: #1256a0; fill-opacity: 0.18; }
+
+.feature-geo__etiqueta {
+  font: 600 8.5px "Inter", sans-serif;
+  fill: #4b3f30;
+  paint-order: stroke;
+  stroke: #f2ead9;
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.feature-geo:hover .feature-geo__etiqueta { opacity: 1; }
+
+.mapa-zoom-controles button {
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--texto);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.08);
+}
+
+#grafo-correlaciones { touch-action: none; cursor: grab; }
+#grafo-correlaciones:active { cursor: grabbing; }
+
+.resena {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: min(260px, 42%);
+  max-height: 260px;
+  overflow-y: auto;
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 0.8rem 0.9rem;
+  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.15);
+  font-size: 0.8rem;
+  display: none;
+}
+
+.resena.visible { display: block; }
+
+.resena__cerrar {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.5rem;
+  border: 0;
+  background: none;
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.resena__titulo {
+  margin: 0 1.3rem 0.6rem 0;
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+
+.resena__item { padding: 0.45rem 0; border-top: 1px solid var(--borde); }
+.resena__item:first-child { border-top: 0; }
+
+.resena__item a {
+  color: var(--texto);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.78rem;
+  line-height: 1.3;
+}
+.resena__item a:hover { text-decoration: underline; }
+
+.resena__vacio { color: var(--texto-suave); }
+
+.resena__stat {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.3rem 0;
+  font-size: 0.75rem;
+  border-bottom: 1px dashed var(--borde);
+}
+.resena__stat span { color: var(--texto-suave); }
+.resena__stat strong { font-weight: 700; }
+
+.resena__favorito {
+  display: block;
+  width: 100%;
+  margin: 0.4rem 0 0.7rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #e8c34a;
+  border-radius: 8px;
+  background: #fffaf0;
+  color: #926a00;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+}
+.resena__favorito.activo { background: #f5b700; color: #3a2a00; border-color: #d99e00; }
+
+#grafo-correlaciones { width: 100%; height: auto; display: block; }
+
+.nodo-correlacion {
+  cursor: pointer;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 0.25s ease;
+}
+
+.nodo-forma {
+  transition: fill 0.15s ease, opacity 0.15s ease, transform 0.25s ease;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.nodo-correlacion.filtrado .nodo-forma { transform: scale(0.4); }
+
+.nodo-correlacion.volatilidad-alta .nodo-forma {
+  animation: pulso-volatilidad 2.2s ease-in-out infinite;
+}
+
+.nodo-correlacion.tendencia-alta .nodo-forma {
+  animation: pulso-tendencia 1.6s ease-in-out infinite;
+}
+
+@keyframes pulso-tendencia {
+  0%, 100% { filter: drop-shadow(0 0 0 rgba(255, 140, 0, 0)); }
+  50%      { filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.9)); }
+}
+
+.nodo-tendencia-icono {
+  pointer-events: none;
+  paint-order: stroke;
+  stroke: #fff;
+  stroke-width: 3px;
+}
+
+@keyframes pulso-volatilidad {
+  0%, 100% { filter: drop-shadow(0 0 0 rgba(198, 40, 40, 0)); }
+  50%      { filter: drop-shadow(0 0 6px rgba(198, 40, 40, 0.55)); }
+}
+
+.nodo-etiqueta { font: 700 11px "Inter", sans-serif; fill: #fff; pointer-events: none; }
+
+.nodo-bandera {
+  pointer-events: none;
+  paint-order: stroke;
+  stroke: #fff;
+  stroke-width: 3px;
+}
+
+.nodo-badge {
+  font: 800 9px "Inter", sans-serif;
+  pointer-events: none;
+  paint-order: stroke;
+  stroke: #fff;
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+.nodo-badge--sube { fill: var(--sube); }
+.nodo-badge--baja { fill: var(--baja); }
+
+.orbita-guia { fill: none; stroke: var(--borde); stroke-dasharray: 3 7; }
+
+.continente {
+  fill: #f2ead9;
+  stroke: #b9a888;
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  transition: fill 0.2s ease, stroke 0.2s ease;
+}
+.continente:hover { fill: #ece0c8; }
+.continente--resaltado { fill: #e3c98f !important; stroke: #9c7a3a !important; stroke-width: 1.1 !important; }
+
+.graticula { fill: none; stroke: #2f5266; stroke-width: 0.5; stroke-dasharray: 2 4; opacity: 0.35; }
+
+.capa-dinamica .nodo-correlacion .nodo-forma {
+  filter: drop-shadow(0 2px 3px rgba(16, 24, 40, 0.28));
+}
+
+.categoria-economico .nodo-forma { stroke: #f5c400; }
+.categoria-politico .nodo-forma { stroke: #111827; }
+.categoria-social .nodo-forma { stroke: #059669; }
+
+.cluster-cerrar {
+  font: 700 11px "Inter", sans-serif;
+  fill: var(--texto-suave);
+  cursor: pointer;
+  text-decoration: underline;
+}
+.cluster-cerrar:hover { fill: var(--texto); }
+
+.arista-correlacion {
+  transition: opacity 0.15s ease;
+  stroke-dasharray: 6 4;
+  animation: flujo-arista 1.2s linear infinite;
+}
+
+.arista-correlacion.atenuada { opacity: 0.04 !important; }
+
+.arista-etiqueta {
+  font: 700 11px "Inter", sans-serif;
+  fill: #111827;
+  paint-order: stroke;
+  stroke: #fff;
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease;
+}
+.arista-etiqueta.activa { opacity: 1; }
+
+.senal-alerta {
+  fill: #f5b700;
+  filter: drop-shadow(0 0 4px rgba(245, 183, 0, 0.9));
+  animation: viajar-senal 1.4s ease-out forwards;
+}
+
+@keyframes viajar-senal {
+  from { offset-distance: 0%; opacity: 1; }
+  to   { offset-distance: 100%; opacity: 0; }
+}
+
+.contagio__leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.25rem;
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--texto-suave);
+}
+
+.contagio__muestra {
+  display: inline-block;
+  width: 18px;
+  height: 3px;
+  margin-right: 0.35rem;
+  vertical-align: middle;
+  border-radius: 2px;
+}
+
+.contagio__muestra--pos { background: var(--sube); }
+.contagio__muestra--neg { background: var(--baja); }
+
+.contagio__forma {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 0.35rem;
+  vertical-align: middle;
+  background: var(--texto);
+}
+
+.contagio__forma--circulo { border-radius: 50%; }
+.contagio__forma--hex { clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); }
+
+.contagio__categoria {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 0.35rem;
+  vertical-align: middle;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid;
+}
+.contagio__categoria--economico { border-color: #f5c400; }
+.contagio__categoria--politico { border-color: #111827; }
+.contagio__categoria--social { border-color: #059669; }
+
+.contagio__top {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 1rem 0 0;
+  border-top: 1px solid var(--borde);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  font-size: 0.85rem;
+}
+
+.contagio__top li strong { font-weight: 700; }
+
+.sentimiento-timeline {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--borde);
+}
+
+.sentimiento-timeline__cabecera {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.sentimiento-timeline h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.sentimiento-timeline__aviso {
+  font-size: 0.8rem;
+  color: var(--texto-suave);
+}
+
+.columnas { margin: 0 0 2.5rem; }
+
+.columnas h2 {
+  margin: 0 0 1rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.columnas__pista {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding-bottom: 0.5rem;
+  cursor: grab;
+  scrollbar-width: thin;
+  scrollbar-color: #c9ced6 transparent;
+}
+
+.columnas__pista:active { cursor: grabbing; }
+
+.columnas__aviso {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--texto-suave);
+}
+
+.columna {
+  flex: 0 0 240px;
+  scroll-snap-align: start;
+  padding: 0 1.25rem;
+  border-left: 1px solid var(--borde);
+  text-decoration: none;
+  color: var(--texto);
+}
+
+.columna:first-child { border-left: 0; padding-left: 0; }
+
+.columna__fecha {
+  display: block;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  font-size: 0.7rem;
+  color: var(--texto-suave);
+  margin-bottom: 0.5rem;
+}
+
+.columna__titulo {
+  display: block;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.15rem;
+  line-height: 1.3;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.columna:hover .columna__titulo { text-decoration: underline; }
+
+.columna__bajada {
+  display: block;
+  font-family: Georgia, serif;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--texto-suave);
+}
+
+.columna__autor {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+}
+
+.columna__avatar {
+  position: relative;
+  width: 1.8rem;
+  height: 1.8rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #9ca3af;
+}
+
+.columna__avatar--hombre { background: #1256a0; }
+.columna__avatar--mujer  { background: #9c3f63; }
+
+.columna__avatar::before {
+  content: "";
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  width: 34%;
+  height: 34%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: #fff;
+}
+
+.columna__avatar::after {
+  content: "";
+  position: absolute;
+  bottom: -18%;
+  left: 50%;
+  width: 72%;
+  height: 58%;
+  transform: translateX(-50%);
+  border-radius: 50% 50% 0 0;
+  background: #fff;
+}
+
+.columna__firma { display: flex; flex-direction: column; gap: 0.05rem; min-width: 0; }
+
+.columna__nombre {
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--texto);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.columna__materia {
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  font-size: 0.7rem;
+  color: var(--acento);
+}
+
+  </style>
+</head>
+
+<body>
+  <header class="barra">
+    <a class="logo" href="/" aria-label="Inicio">
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo de Investing.AI">
+  </a>
+    <nav class="menu" aria-label="Monedas internacionales">
+      <div class="menu__pista">
+
+        <!-- Grupo 1: el que se lee y se navega -->
+        <ul class="menu__grupo">
+          <li>
+            <button class="menu__boton" type="button" data-moneda="dolar">
+              <span class="menu__ficha">$</span>
+              <span class="menu__texto">
+                <span class="menu__nombre">Dólar</span>
+                <span class="menu__codigo">USD</span>
+              </span>
+            </button>
+          </li>
+          <li>
+            <button class="menu__boton" type="button" data-moneda="euro">
+              <span class="menu__ficha">€</span>
+              <span class="menu__texto">
+                <span class="menu__nombre">Euro</span>
+                <span class="menu__codigo">EUR</span>
+              </span>
+            </button>
+          </li>
+          <li>
+            <button class="menu__boton" type="button" data-moneda="yen">
+              <span class="menu__ficha">¥</span>
+              <span class="menu__texto">
+                <span class="menu__nombre">Yen</span>
+                <span class="menu__codigo">JPY</span>
+              </span>
+            </button>
+          </li>
+          <li>
+            <button class="menu__boton" type="button" data-moneda="libra">
+              <span class="menu__ficha">£</span>
+              <span class="menu__texto">
+                <span class="menu__nombre">Libra</span>
+                <span class="menu__codigo">GBP</span>
+              </span>
+            </button>
+          </li>
+          <li>
+            <button class="menu__boton" type="button" data-moneda="yuan">
+              <span class="menu__ficha">元</span>
+              <span class="menu__texto">
+                <span class="menu__nombre">Yuan</span>
+                <span class="menu__codigo">CNY</span>
+              </span>
+            </button>
+          </li>
+        </ul>
+
+        <!-- Grupo 2: copia exacta para que el bucle no tenga cortes -->
+        <ul class="menu__grupo" aria-hidden="true">
+          <li>
+            <button class="menu__boton" type="button" data-moneda="dolar" tabindex="-1">
+              <span class="menu__ficha">$</span>
+              <span class="menu__texto">
+                <span class="menu__nombre">Dólar</span>
+                <span class="menu__codigo">USD</span>
+              </span>
+            </button>
+          </li>
+          <li>
+            <button class="menu__boton" type="button" data-moneda="euro" tabindex="-1">
+              <span class="menu__ficha">€</span>
+              <span class="menu__texto">
+                <span class="menu__nombre">Euro</span>
+                <span class="menu__codigo">EUR</span>
+              </span>
+            </button>
+          </li>
+          <li>
+            <button class="menu__boton" type="button" data-moneda="yen" tabindex="-1">
+              <span class="menu__ficha">¥</span>
+              <span class="menu__texto">
+                <span class="menu__nombre">Yen</span>
+                <span class="menu__codigo">JPY</span>
+              </span>
+            </button>
+          </li>
+          <li>
+            <button class="menu__boton" type="button" data-moneda="libra" tabindex="-1">
+              <span class="menu__ficha">£</span>
+              <span class="menu__texto">
+                <span class="menu__nombre">Libra</span>
+                <span class="menu__codigo">GBP</span>
+              </span>
+            </button>
+          </li>
+          <li>
+            <button class="menu__boton" type="button" data-moneda="yuan" tabindex="-1">
+              <span class="menu__ficha">元</span>
+              <span class="menu__texto">
+                <span class="menu__nombre">Yuan</span>
+                <span class="menu__codigo">CNY</span>
+              </span>
+            </button>
+          </li>
+        </ul>
+
+      </div>
+    </nav>
+  </header>
+   <div class="desplegable" id="desplegable" role="menu" aria-label="Datos de la moneda"></div>
+  
+   <main>
+    <div class="hero">
+  <div class="hero__titulo">
+    <h1>G20<span>.</span>VIX</h1>
+    <p>Where politics moves markets</p>
+  </div>
+
+  <div class="ticker" aria-label="Indicadores de acciones">
+    <div class="ticker__pista ticker__pista--estatica" id="ticker-pista">Cargando…</div>
+  </div>
+</div>
+
+<section class="briefing" aria-label="Resumen del día">
+  <h2>Today's briefing</h2>
+  <p class="briefing__texto" id="briefing-texto">Cargando…</p>
+</section>
+
+<section class="columnas" aria-label="Artículos de G20.VIX">
+  <h2>From the newsroom</h2>
+  <div class="columnas__pista" id="columnas-pista">
+    <p class="columnas__aviso">Cargando…</p>
+  </div>
+</section>
+
+    <div class="contenido">
+
+      <section class="tendencias">
+        <h2>Dollar on other currencies</h2>
+
+        <div class="periodos" role="group" aria-label="Periodo">
+          <button type="button" data-periodo="1m">1 month</button>
+          <button type="button" data-periodo="6m" class="activo">6 months</button>
+          <button type="button" data-periodo="1a">1 year</button>
+        </div>
+
+        
+<div id="mosaico-avisos"><p class="mosaico__aviso">Cargando…</p></div>
+<div class="mosaico" id="mosaico"></div>
+<div id="comparativo-caja"></div>
+      </section>
+
+      <aside class="noticias" id="panel-noticias" aria-label="Noticias de geopolítica y divisas">
+  <div class="noticias__cabecera">
+    <h2>Geopolitics and currencies</h2>
+    <button class="noticias__cerrar" id="cerrar-noticias" type="button" aria-label="Cerrar noticias">✕</button>
+  </div>
+  <div class="noticias__lista" id="lista-noticias">Cargando…</div>
+</aside>
+
+    </div>
+
+  <section class="contagio" aria-label="Mapa de contagio financiero">
+  <h2>Financial contagion map</h2>
+  <p class="contagio__ayuda">Cada nodo está ubicado según su geografía real. El color del borde indica su categoría (amarillo = económico, negro = político, verde = social), el grosor del borde su riesgo/regulación, y el badge inferior su cambio diario. Las empresas de EE. UU. se agrupan en un solo marcador — haz clic para desplegarlas. Pasa el cursor sobre un nodo o una línea para ver el valor de correlación.</p>
+  <div class="contagio__control">
+    <select id="shock-nodo" aria-label="Nodo a shockear"></select>
+    <select id="buscador-nodo" aria-label="Buscar y centrar en un nodo">
+  <option value="">Buscar divisa, empresa o commodity…</option>
+</select>
+    <div class="contagio__signo" role="group" aria-label="Dirección del shock">
+      <button type="button" class="shock-signo activo" data-signo="1">Shock alcista ▲</button>
+      <button type="button" class="shock-signo" data-signo="-1">Shock bajista ▼</button>
+    </div>
+        <button type="button" id="shock-boton">Inyectar shock</button>
+    <button type="button" id="shock-reset">Ver correlaciones</button>
+    <button type="button" id="cartera-boton">★ Ver solo mi cartera</button>
+  </div>
+  <div class="comparador" aria-label="Comparar dos fechas">
+   <label>Comparar
+    <select id="comparador-desde" aria-label="Desde"></select>
+   </label>
+   <label>con
+    <select id="comparador-hasta" aria-label="Hasta"></select>
+   </label>
+    <button type="button" id="comparador-boton">Comparar</button>
+    <button type="button" id="comparador-reset">Quitar comparación</button>
+    <button type="button" id="reproducir-evolucion">▶ Reproducir evolución</button>
+    <span id="reproducir-fecha"></span>
+</div> 
+<div class="comparador__resultado" id="comparador-resultado"></div>
+   <div class="alertas-contagio" id="alertas-contagio"></div> 
+<section class="cartera" aria-label="Mi cartera y pronósticos">
+  <h3>Mi cartera y pronósticos</h3>
+  <p class="cartera__ayuda">Elegí un activo, indicá cuánto tenés invertido (la unidad que uses es solo tu referencia) y vas a ver un pronóstico de corto plazo, calculado a partir de cómo se mueven hoy los factores más correlacionados con ese activo. Es una estimación estadística, no una recomendación de inversión ni una garantía de resultado.</p>
+  <div class="cartera__control">
+    <select id="cartera-selector" aria-label="Elegir activo"></select>
+    <input type="number" id="cartera-monto" placeholder="Monto invertido" min="0" step="0.01">
+    <button type="button" id="cartera-agregar">+ Agregar a mi cartera</button>
+  </div>
+  <div id="cartera-lista"></div>
+</section>
+   <div class="contagio__envoltorio">
+        <div class="contagio__filtros" role="group" aria-label="Filtrar por categoría">
+      <button type="button" class="filtro-categoria activo" data-categoria="economico">
+    <i class="contagio__categoria contagio__categoria--economico"></i> Económico
+  </button>
+      <button type="button" class="filtro-categoria activo" data-categoria="politico">
+       <i class="contagio__categoria contagio__categoria--politico"></i> Político
+      </button>
+      <button type="button" class="filtro-categoria activo" data-categoria="social">
+       <i class="contagio__categoria contagio__categoria--social"></i> Social
+      </button>
+</div>  
+<div class="umbral-control" aria-label="Umbral mínimo de correlación">
+  <label for="umbral-correlacion">Mostrar correlaciones ≥ <strong id="umbral-valor">0.40</strong></label>
+  <input type="range" id="umbral-correlacion" min="0" max="0.9" step="0.05" value="0.4">
+</div>
+    <button type="button" id="boton-geografia" class="boton-geografia">🗺️ Mostrar geografía económica</button>
+    <div class="mapa-zoom-controles">
+      <button type="button" id="zoom-mas" aria-label="Acercar">+</button>
+      <button type="button" id="zoom-menos" aria-label="Alejar">−</button>
+      <button type="button" id="zoom-reset" aria-label="Restablecer zoom">⤾</button>
+  </div>
+    <svg id="grafo-correlaciones" viewBox="0 0 1000 500" role="img" aria-label="Mapa mundial de contagio financiero"></svg>
+     <div class="resena" id="resena-nodo">
+      <button type="button" class="resena__cerrar" id="resena-cerrar" aria-label="Cerrar reseña">✕</button>
+      <p class="resena__titulo" id="resena-titulo"></p>
+      <button type="button" class="resena__favorito" id="resena-favorito">☆ Marcar en mi cartera</button>
+      <div id="resena-macro"></div>
+      <div id="resena-lista"></div>
+    </div>
+    <div class="contagio__leyenda">
+    <span><i class="contagio__muestra contagio__muestra--pos"></i> Correlación positiva</span>
+    <span><i class="contagio__muestra contagio__muestra--neg"></i> Correlación negativa</span>
+    <span><i class="contagio__forma contagio__forma--circulo"></i> Nodo macro (divisa, país, commodity)</span>
+    <span><i class="contagio__forma contagio__forma--hex"></i> Empresa</span>
+    <span><i class="contagio__categoria contagio__categoria--economico"></i> Borde económico</span>
+    <span><i class="contagio__categoria contagio__categoria--politico"></i> Borde político</span>
+    <span><i class="contagio__categoria contagio__categoria--social"></i> Borde social</span>
+    <span>Grosor de borde = riesgo/regulación</span>
+    <span>Badge en divisas/commodities/empresas = Δ% de precio diario</span>
+    <span>Badge en políticos/sociales = puntaje de sentimiento (-1 a +1)</span>
+  </div>
+  <ul class="contagio__top" id="contagio-top"></ul>
+  <div class="sentimiento-timeline">
+  <div class="sentimiento-timeline__cabecera">
+    <h3>Sentiment over time</h3>
+    <div class="sentimiento-timeline__aviso" id="sentimiento-aviso"></div>
+  </div>
+  <div class="lienzo lienzo--alto"><canvas id="grafico-sentimiento"></canvas></div>
+</div>
+  <p class="contagio__resultado" id="shock-resultado"></p>
+</section>
+
+    <button class="noticias__boton" id="abrir-noticias" type="button"
+        aria-controls="panel-noticias" aria-expanded="false">Noticias</button>
+<div class="noticias__fondo" id="fondo-noticias"></div>
+<button class="chat__boton" id="abrir-chat" type="button"
+        aria-controls="chat" aria-expanded="false" aria-label="Abrir asistente">IA</button>
+
+<section class="chat" id="chat" aria-label="Asistente de IA">
+  <div class="chat__cabecera">
+    <strong>Asistente Investing.AI</strong>
+    <button class="chat__cerrar" id="cerrar-chat" type="button" aria-label="Cerrar asistente">✕</button>
+  </div>
+  <div class="chat__mensajes" id="chat-mensajes" aria-live="polite">
+    <div class="chat__msg chat__msg--ia">Hola, puedo explicarte cómo se mueven las divisas y su relación con la geopolítica. ¿Qué quieres saber?</div>
+  </div>
+  <div class="chat__entrada">
+    <input id="chat-texto" type="text" maxlength="2000" placeholder="Escribe tu pregunta…" autocomplete="off">
+    <button id="chat-enviar" type="button">Enviar</button>
+  </div>
+</section>
+  </main>
+
+ <div class="visor" id="visor" role="dialog" aria-modal="true" aria-label="Reproductor de video">
+  <div class="visor__caja">
+    <div class="visor__marco" id="visor-marco"></div>
+    <div class="visor__pie">
+      <a id="visor-enlace" href="#" target="_blank" rel="noopener noreferrer">Ver en YouTube</a>
+      <button class="visor__cerrar" id="visor-cerrar" type="button" aria-label="Cerrar video">✕</button>
+    </div>
+  </div>
+</div> 
+
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+<script>
+  const COLORES = { EUR: "#2b4c9b", JPY: "#b23a48", GBP: "#6b3fa0", CNY: "#b8700a" };
+  const CODIGOS = { euro: "EUR", yen: "JPY", libra: "GBP", yuan: "CNY" };
+  
+Chart.defaults.font.family = "Inter, 'Segoe UI', sans-serif";
+Chart.defaults.color = "#6b7280";
+Chart.defaults.borderColor = "#eceef1";
+
+  let graficos = {};
+  let ultimasNoticias = [];
+
+  const NOTICIAS_EN_MOSAICO = 5;   // 4 monedas + 5 noticias = cuadrícula 3×3
+
+const mosaico = document.getElementById("mosaico");
+const avisosMosaico = document.getElementById("mosaico-avisos");
+const cajaComparativo = document.getElementById("comparativo-caja");
+
+const partes = {
+  monedas: { tarjetas: [], mensaje: "Cargando…" },
+  medios:  { tarjetas: [], mensaje: "Cargando…" },
+};
+
+// noticia, moneda, noticia, moneda...
+function intercalar(noticias, monedas) {
+  const salida = [];
+  const total = Math.max(noticias.length, monedas.length);
+  for (let i = 0; i < total; i++) {
+    if (i < noticias.length) salida.push(noticias[i]);
+    if (i < monedas.length) salida.push(monedas[i]);
+  }
+  return salida;
+}
+
+function pintarMosaico() {
+  mosaico.replaceChildren(...intercalar(partes.medios.tarjetas, partes.monedas.tarjetas));
+
+  const mensajes = [...new Set(Object.values(partes).map((p) => p.mensaje).filter(Boolean))];
+  avisosMosaico.replaceChildren(...mensajes.map((texto) => {
+    const aviso = document.createElement("p");
+    aviso.className = "mosaico__aviso";
+    aviso.textContent = texto;
+    return aviso;
+  }));
+
+  Object.values(graficos).forEach((g) => g.resize());
+}
+
+function destruirGraficos() {
+  Object.values(graficos).forEach((g) => g.destroy());
+  graficos = {};
+}
+
+  async function cargar(periodo) {
+  try {
+    const respuesta = await fetch(`/api/tendencias?periodo=${periodo}`);
+    if (!respuesta.ok) throw new Error("Respuesta no válida");
+    dibujar(await respuesta.json());
+  } catch (error) {
+    destruirGraficos();
+    cajaComparativo.replaceChildren();
+    partes.monedas.tarjetas = [];
+    partes.monedas.mensaje = "No se pudieron cargar las monedas. Intenta de nuevo en un momento.";
+    pintarMosaico();
+  }
+}
+
+  function dibujar(datos) {
+  destruirGraficos();
+  const pendientes = [];   // los gráficos se crean cuando las tarjetas ya están en la página
+
+  cajaComparativo.replaceChildren(crearComparativo(datos, pendientes));
+  partes.monedas.tarjetas = Object.entries(datos.monedas)
+    .map(([codigo, moneda]) => crearTarjetaMoneda(codigo, moneda, datos.fechas, pendientes));
+  partes.monedas.mensaje = "";
+  pintarMosaico();
+
+  pendientes.forEach(([clave, canvas, config]) => {
+    graficos[clave] = new Chart(canvas, config);
+  });
+}
+
+function crearTarjetaMoneda(codigo, moneda, fechas, pendientes) {
+  const sube = moneda.variacion >= 0;
+  const signo = sube ? "+" : "";
+  const lectura = sube ? "se debilitó" : "se fortaleció";
+
+  const tarjeta = document.createElement("article");
+  tarjeta.className = "cuadro";
+  tarjeta.id = `cuadro-${codigo}`;
+  tarjeta.innerHTML = `
+    <h3>${moneda.nombre} <span>${codigo}</span></h3>
+    <div class="cifra">${moneda.ultimo.toFixed(4)} <small>por 1 USD</small></div>
+    <div class="variacion ${sube ? "sube" : "baja"}">${signo}${moneda.variacion.toFixed(2)} % · ${lectura} frente al dólar</div>
+    <div class="lienzo"><canvas></canvas></div>`;
+
+  pendientes.push([codigo, tarjeta.querySelector("canvas"), {
+    type: "line",
+    data: {
+      labels: fechas,
+      datasets: [{
+        data: moneda.valores,
+        borderColor: COLORES[codigo],
+        borderWidth: 2,
+        pointRadius: 0,
+        tension: 0.25,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { maxTicksLimit: 5, maxRotation: 0 }, grid: { display: false } },
+        y: { ticks: { maxTicksLimit: 5 } },
+      },
+    },
+  }]);
+  return tarjeta;
+}
+
+function crearComparativo(datos, pendientes) {
+  const tarjeta = document.createElement("article");
+  tarjeta.className = "cuadro cuadro--ancho";
+  tarjeta.id = "comparativo";
+  tarjeta.innerHTML = `
+    <h3>Comparación frente al dólar</h3>
+    <div class="variacion">Valor de cada moneda en dólares, con base 100 al inicio del periodo. Sobre 100 significa que se fortaleció.</div>
+    <div class="lienzo lienzo--alto"><canvas></canvas></div>`;
+
+  const series = Object.entries(datos.monedas).map(([codigo, moneda]) => ({
+    label: moneda.nombre,
+    data: moneda.valores.map((v) => Number(((moneda.valores[0] / v) * 100).toFixed(2))),
+    borderColor: COLORES[codigo],
+    borderWidth: 2,
+    pointRadius: 0,
+    tension: 0.25,
+  }));
+
+  pendientes.push(["comparativo", tarjeta.querySelector("canvas"), {
+    type: "line",
+    data: { labels: datos.fechas, datasets: series },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
+      plugins: { legend: { display: true, position: "bottom" } },
+      scales: {
+        x: { ticks: { maxTicksLimit: 6, maxRotation: 0 }, grid: { display: false } },
+        y: { ticks: { maxTicksLimit: 6 } },
+      },
+    },
+  }]);
+  return tarjeta;
+}
+
+  function irA(codigo) {
+    const suave = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const tarjeta = codigo ? document.getElementById(`cuadro-${codigo}`) : null;
+    const destino = tarjeta || document.querySelector(".tendencias");
+
+    destino.scrollIntoView({
+      behavior: suave ? "smooth" : "auto",
+      block: tarjeta ? "center" : "start",
+    });
+
+    if (tarjeta) {
+      tarjeta.classList.add("resaltado");
+      setTimeout(() => tarjeta.classList.remove("resaltado"), 1800);
+    }
+  }
+
+  document.querySelector(".menu").addEventListener("click", (e) => {
+    const boton = e.target.closest(".menu__boton");
+    if (boton) irA(CODIGOS[boton.dataset.moneda]);
+  });
+
+  document.querySelectorAll(".periodos button").forEach((boton) => {
+    boton.addEventListener("click", () => {
+      document.querySelector(".periodos .activo").classList.remove("activo");
+      boton.classList.add("activo");
+      cargar(boton.dataset.periodo);
+    });
+  });
+
+const INFO = {
+  dolar: [
+    ["País o zona", "Estados Unidos"],
+    ["Banco central", "Reserva Federal"],
+    ["Símbolo", "$"],
+    ["Código", "USD"],
+    ["Subunidad", "Centavo"],
+  ],
+  euro: [
+    ["País o zona", "Eurozona"],
+    ["Banco central", "Banco Central Europeo"],
+    ["Símbolo", "€"],
+    ["Código", "EUR"],
+    ["Subunidad", "Céntimo"],
+  ],
+  yen: [
+    ["País o zona", "Japón"],
+    ["Banco central", "Banco de Japón"],
+    ["Símbolo", "¥"],
+    ["Código", "JPY"],
+    ["Subunidad", "Sen"],
+  ],
+  libra: [
+    ["País o zona", "Reino Unido"],
+    ["Banco central", "Banco de Inglaterra"],
+    ["Símbolo", "£"],
+    ["Código", "GBP"],
+    ["Subunidad", "Penique"],
+  ],
+  yuan: [
+    ["País o zona", "China"],
+    ["Banco central", "Banco Popular de China"],
+    ["Símbolo", "元"],
+    ["Código", "CNY"],
+    ["Subunidad", "Fen"],
+  ],
+};
+
+const menuMonedas = document.querySelector(".menu");
+const desplegable = document.getElementById("desplegable");
+let temporizador;
+
+function abrirDesplegable(boton) {
+  clearTimeout(temporizador);
+
+  desplegable.innerHTML = INFO[boton.dataset.moneda]
+    .map(([titulo, valor]) => `
+      <div class="desplegable__cuadro" role="menuitem">
+        <span>${titulo}</span>
+        <strong>${valor}</strong>
+      </div>`)
+    .join("");
+
+  const caja = boton.getBoundingClientRect();
+  desplegable.style.top = `${caja.bottom}px`;
+  desplegable.style.left = `${caja.left}px`;
+  desplegable.classList.add("visible");
+
+  // evita que la lista se salga por el borde derecho de la pantalla
+  const ancho = desplegable.offsetWidth;
+  const izquierda = Math.max(8, Math.min(caja.left, window.innerWidth - ancho - 8));
+  desplegable.style.left = `${izquierda}px`;
+
+  menuMonedas.classList.add("pausado");
+}
+
+function cerrarDesplegable() {
+  temporizador = setTimeout(() => {
+    desplegable.classList.remove("visible");
+    menuMonedas.classList.remove("pausado");
+  }, 150);
+}
+
+menuMonedas.addEventListener("mouseover", (e) => {
+  const boton = e.target.closest(".menu__boton");
+  if (boton) abrirDesplegable(boton);
+});
+menuMonedas.addEventListener("focusin", (e) => {
+  const boton = e.target.closest(".menu__boton");
+  if (boton) abrirDesplegable(boton);
+});
+menuMonedas.addEventListener("mouseout", cerrarDesplegable);
+menuMonedas.addEventListener("focusout", cerrarDesplegable);
+
+desplegable.addEventListener("mouseenter", () => clearTimeout(temporizador));
+desplegable.addEventListener("mouseleave", cerrarDesplegable);
+
+window.addEventListener("scroll", () => {
+  desplegable.classList.remove("visible");
+  menuMonedas.classList.remove("pausado");
+}, { passive: true });
+
+async function cargarNoticias() {
+  const lista = document.getElementById("lista-noticias");
+  try {
+    const respuesta = await fetch("/api/noticias");
+    if (!respuesta.ok) throw new Error("Respuesta no válida");
+    const noticias = await respuesta.json();
+    ultimasNoticias = noticias;
+
+    lista.textContent = "";
+    if (noticias.length === 0) {
+      lista.textContent = "No hay noticias recientes.";
+      return;
+    }
+
+    noticias.forEach((n) => {
+      const enlace = document.createElement("a");
+      enlace.className = "noticia";
+      enlace.href = n.url;
+      enlace.target = "_blank";
+      enlace.rel = "noopener noreferrer";
+
+      const titulo = document.createElement("span");
+      titulo.className = "noticia__titulo";
+      titulo.textContent = n.titulo;
+
+      const meta = document.createElement("span");
+      meta.className = "noticia__meta";
+      meta.textContent = `${n.fuente} · ${n.fecha}`;
+
+      enlace.append(titulo, meta);
+      lista.appendChild(enlace);
+    });
+  } catch (error) {
+    lista.textContent = "No se pudieron cargar las noticias. Intenta de nuevo en un momento.";
+  }
+}
+
+const panelNoticias = document.getElementById("panel-noticias");
+const botonNoticias = document.getElementById("abrir-noticias");
+const fondoNoticias = document.getElementById("fondo-noticias");
+
+async function cargarBriefing() {
+  const texto = document.getElementById("briefing-texto");
+  try {
+    const respuesta = await fetch("/api/resumen-dia");
+    if (!respuesta.ok) throw new Error("Respuesta no válida");
+    const datos = await respuesta.json();
+    texto.textContent = datos.texto;
+  } catch (error) {
+    texto.textContent = "No se pudo generar el resumen del día por ahora.";
+  }
+}
+
+function alternarNoticias(abrir) {
+  panelNoticias.classList.toggle("abierto", abrir);
+  fondoNoticias.classList.toggle("visible", abrir);
+  botonNoticias.setAttribute("aria-expanded", String(abrir));
+}
+
+botonNoticias.addEventListener("click", () => alternarNoticias(true));
+document.getElementById("cerrar-noticias").addEventListener("click", () => alternarNoticias(false));
+fondoNoticias.addEventListener("click", () => alternarNoticias(false));
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") alternarNoticias(false);
+});
+
+const chatPanel = document.getElementById("chat");
+const chatAbrir = document.getElementById("abrir-chat");
+const chatMensajes = document.getElementById("chat-mensajes");
+const chatTexto = document.getElementById("chat-texto");
+const chatEnviar = document.getElementById("chat-enviar");
+const historialChat = [];
+
+function alternarChat(abrir) {
+  chatPanel.classList.toggle("abierto", abrir);
+  chatAbrir.setAttribute("aria-expanded", String(abrir));
+  if (abrir) chatTexto.focus();
+}
+
+function agregarMensaje(texto, clase) {
+  const burbuja = document.createElement("div");
+  burbuja.className = `chat__msg ${clase}`;
+  burbuja.textContent = texto;
+  chatMensajes.appendChild(burbuja);
+  chatMensajes.scrollTop = chatMensajes.scrollHeight;
+  return burbuja;
+}
+
+async function enviarPregunta() {
+  const texto = chatTexto.value.trim();
+  if (!texto) return;
+
+  chatTexto.value = "";
+  chatEnviar.disabled = true;
+  agregarMensaje(texto, "chat__msg--yo");
+  historialChat.push({ role: "user", content: texto });
+  const espera = agregarMensaje("Escribiendo…", "chat__msg--ia");
+
+  try {
+    const respuesta = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mensajes: historialChat }),
+    });
+    if (!respuesta.ok) throw new Error("Respuesta no válida");
+    const datos = await respuesta.json();
+    espera.textContent = datos.respuesta;
+    historialChat.push({ role: "assistant", content: datos.respuesta });
+  } catch (error) {
+    espera.textContent = "No se pudo obtener respuesta. Intenta de nuevo en un momento.";
+    historialChat.pop();   // quita la pregunta que falló para no romper el orden
+  } finally {
+    chatEnviar.disabled = false;
+    chatMensajes.scrollTop = chatMensajes.scrollHeight;
+  }
+}
+
+chatAbrir.addEventListener("click", () => alternarChat(!chatPanel.classList.contains("abierto")));
+document.getElementById("cerrar-chat").addEventListener("click", () => alternarChat(false));
+chatEnviar.addEventListener("click", enviarPregunta);
+chatTexto.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") enviarPregunta();
+});
+
+function formatearPrecio(n) {
+  return "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function crearGrupoTicker(acciones, oculto) {
+  const grupo = document.createElement("div");
+  grupo.className = "ticker__grupo";
+  if (oculto) grupo.setAttribute("aria-hidden", "true");
+
+  acciones.forEach((a) => {
+    const item = document.createElement("div");
+    item.className = "ticker__item";
+
+    const simbolo = document.createElement("span");
+    simbolo.className = "ticker__simbolo";
+    simbolo.textContent = a.simbolo;
+
+    const nombre = document.createElement("span");
+    nombre.className = "ticker__nombre";
+    nombre.textContent = a.nombre;
+
+    const precio = document.createElement("span");
+    precio.className = "ticker__precio";
+    precio.textContent = formatearPrecio(a.precio);
+
+    const cambio = document.createElement("span");
+    cambio.className = "ticker__cambio";
+    if (a.variacion === null) {
+      cambio.textContent = "—";
+    } else {
+      const sube = a.variacion >= 0;
+      cambio.classList.add(sube ? "sube" : "baja");
+      cambio.textContent = `${sube ? "▲" : "▼"} ${Math.abs(a.variacion).toFixed(2)}%`;
+    }
+
+    item.append(simbolo, nombre, precio, cambio);
+    grupo.appendChild(item);
+  });
+
+  return grupo;
+}
+
+async function cargarTicker() {
+  const pista = document.getElementById("ticker-pista");
+  try {
+    const respuesta = await fetch("/api/acciones");
+    if (!respuesta.ok) throw new Error("Respuesta no válida");
+    const acciones = await respuesta.json();
+
+    pista.textContent = "";
+    pista.classList.remove("ticker__pista--estatica");
+    // dos copias idénticas para que el bucle no tenga cortes
+    pista.append(crearGrupoTicker(acciones, false), crearGrupoTicker(acciones, true));
+  } catch (error) {
+    pista.classList.add("ticker__pista--estatica");
+    pista.textContent = "Indicadores no disponibles por ahora.";
+  }
+}
+
+cargarTicker();
+setInterval(cargarTicker, 5 * 60 * 1000);
+
+const visor = document.getElementById("visor");
+const visorMarco = document.getElementById("visor-marco");
+const relativo = new Intl.RelativeTimeFormat("es", { numeric: "auto" });
+
+function haceCuanto(ts) {
+  const minutos = Math.round((ts * 1000 - Date.now()) / 60000);
+  if (Math.abs(minutos) < 60) return relativo.format(minutos, "minute");
+  const horas = Math.round(minutos / 60);
+  if (Math.abs(horas) < 48) return relativo.format(horas, "hour");
+  return relativo.format(Math.round(horas / 24), "day");
+}
+
+function abrirVideo(id, url) {
+  const marco = document.createElement("iframe");
+  marco.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0`;
+  marco.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+  marco.allowFullscreen = true;
+  marco.referrerPolicy = "strict-origin-when-cross-origin";
+  marco.title = "Video";
+  visorMarco.replaceChildren(marco);
+  document.getElementById("visor-enlace").href = url;
+  visor.classList.add("abierto");
+}
+
+function cerrarVideo() {
+  visor.classList.remove("abierto");
+  visorMarco.replaceChildren();   // quita el reproductor para detener el video
+}
+
+document.getElementById("visor-cerrar").addEventListener("click", cerrarVideo);
+visor.addEventListener("click", (e) => { if (e.target === visor) cerrarVideo(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") cerrarVideo(); });
+
+function crearTarjeta(n) {
+  const esVideo = n.tipo === "video";
+  const tarjeta = document.createElement(esVideo ? "button" : "a");
+  tarjeta.className = "tarjeta";
+
+  if (esVideo) {
+    tarjeta.type = "button";
+    tarjeta.setAttribute("aria-label", `Reproducir video: ${n.titulo}`);
+    tarjeta.addEventListener("click", () => abrirVideo(n.video_id, n.url));
+  } else {
+    tarjeta.href = n.url;
+    tarjeta.target = "_blank";
+    tarjeta.rel = "noopener noreferrer";
+  }
+
+  if (n.imagen) {
+    const img = document.createElement("img");
+    img.className = "tarjeta__imagen";
+    img.alt = "";
+    img.loading = "lazy";
+    img.referrerPolicy = "no-referrer";
+    img.addEventListener("error", () => {
+      if (n.imagen_respaldo && img.src !== n.imagen_respaldo) img.src = n.imagen_respaldo;
+      else img.remove();   // sin imagen, queda el fondo oscuro de la tarjeta
+    });
+    img.src = n.imagen;
+    tarjeta.appendChild(img);
+  }
+
+  const etiqueta = document.createElement("span");
+  etiqueta.className = "tarjeta__etiqueta";
+  etiqueta.textContent = esVideo ? `${n.fuente} · Video` : n.fuente;
+  tarjeta.appendChild(etiqueta);
+
+  if (esVideo) {
+    const play = document.createElement("span");
+    play.className = "tarjeta__play";
+    play.setAttribute("aria-hidden", "true");
+    tarjeta.appendChild(play);
+  }
+
+  const texto = document.createElement("span");
+  texto.className = "tarjeta__texto";
+
+  const titulo = document.createElement("span");
+  titulo.className = "tarjeta__titulo";
+  titulo.textContent = n.titulo;
+
+  const fecha = document.createElement("span");
+  fecha.className = "tarjeta__fecha";
+  fecha.textContent = haceCuanto(n.ts);
+
+  texto.append(titulo, fecha);
+  tarjeta.appendChild(texto);
+  return tarjeta;
+}
+
+async function cargarMedios() {
+  try {
+    const [respMedios, respPropios] = await Promise.all([
+      fetch("/api/medios"),
+      fetch("/api/articulos"),
+    ]);
+    const medios = respMedios.ok ? await respMedios.json() : [];
+    const propios = respPropios.ok ? await respPropios.json() : [];
+
+    const propiosAdaptados = propios.map((a) => ({
+      tipo: "propio",
+      fuente: "G20.VIX",
+      titulo: a.titulo,
+      url: `/articulos/${a.slug}`,
+      imagen: null,
+      ts: a.ts || 0,
+    }));
+
+    const combinados = [...medios, ...propiosAdaptados].sort((a, b) => b.ts - a.ts);
+
+    partes.medios.tarjetas = combinados.slice(0, NOTICIAS_EN_MOSAICO).map((n) => crearTarjeta(n));
+    partes.medios.mensaje = combinados.length ? "" : "No hay contenidos recientes.";
+  } catch (error) {
+    partes.medios.tarjetas = [];
+    partes.medios.mensaje = "No se pudieron cargar los contenidos. Intenta de nuevo en un momento.";
+  }
+  pintarMosaico();
+}
+
+async function cargarColumnas() {
+  const pista = document.getElementById("columnas-pista");
+  try {
+    const respuesta = await fetch("/api/articulos");
+    if (!respuesta.ok) throw new Error("Respuesta no válida");
+    const articulos = await respuesta.json();
+
+    if (articulos.length === 0) {
+      pista.replaceChildren(avisoColumnas("Todavía no hay artículos publicados."));
+      return;
+    }
+    pista.replaceChildren(...articulos.map(crearColumna));
+  } catch (error) {
+    pista.replaceChildren(avisoColumnas("No se pudieron cargar los artículos."));
+  }
+}
+
+function avisoColumnas(texto) {
+  const p = document.createElement("p");
+  p.className = "columnas__aviso";
+  p.textContent = texto;
+  return p;
+}
+
+function crearColumna(a) {
+  const enlace = document.createElement("a");
+  enlace.className = "columna";
+  enlace.href = `/articulos/${a.slug}`;
+
+  const fecha = document.createElement("span");
+  fecha.className = "columna__fecha";
+  fecha.textContent = a.fecha;
+
+  const titulo = document.createElement("span");
+  titulo.className = "columna__titulo";
+  titulo.textContent = a.titulo;
+
+  const bajada = document.createElement("span");
+  bajada.className = "columna__bajada";
+  bajada.textContent = a.bajada;
+
+  enlace.append(fecha, titulo, bajada);
+
+  if (a.autor || a.materia) {
+    const fila = document.createElement("span");
+    fila.className = "columna__autor";
+
+    const avatar = document.createElement("span");
+    avatar.className = "columna__avatar" + (a.genero === "hombre" || a.genero === "mujer" ? ` columna__avatar--${a.genero}` : "");
+    avatar.setAttribute("aria-hidden", "true");
+
+    const firma = document.createElement("span");
+    firma.className = "columna__firma";
+
+    if (a.autor) {
+      const nombre = document.createElement("span");
+      nombre.className = "columna__nombre";
+      nombre.textContent = a.autor;
+      firma.appendChild(nombre);
+    }
+    if (a.materia) {
+      const materia = document.createElement("span");
+      materia.className = "columna__materia";
+      materia.textContent = a.materia;
+      firma.appendChild(materia);
+    }
+
+    fila.append(avatar, firma);
+    enlace.appendChild(fila);
+  }
+
+  return enlace;
+}
+
+(function habilitarArrastre(pista) {
+  let activo = false, inicioX = 0, scrollInicial = 0;
+  pista.addEventListener("mousedown", (e) => {
+    activo = true;
+    inicioX = e.pageX;
+    scrollInicial = pista.scrollLeft;
+  });
+  window.addEventListener("mouseup", () => { activo = false; });
+  pista.addEventListener("mouseleave", () => { activo = false; });
+  pista.addEventListener("mousemove", (e) => {
+    if (!activo) return;
+    e.preventDefault();
+    pista.scrollLeft = scrollInicial - (e.pageX - inicioX);
+  });
+})(document.getElementById("columnas-pista"));
+
+cargarColumnas();
+cargarMedios();
+cargarNoticias();
+
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+function crearSVGEl(tag, attrs) {
+  const el = document.createElementNS(SVG_NS, tag);
+  for (const [clave, valor] of Object.entries(attrs)) el.setAttribute(clave, valor);
+  return el;
+}
+
+function hexagono(cx, cy, r) {
+  const puntos = [];
+  for (let i = 0; i < 6; i++) {
+    const angulo = (Math.PI / 3) * i - Math.PI / 2;
+    puntos.push(`${(cx + r * Math.cos(angulo)).toFixed(1)},${(cy + r * Math.sin(angulo)).toFixed(1)}`);
+  }
+  return puntos.join(" ");
+}
+
+// ---------- mapa mundial real (D3 + TopoJSON), misma proyección para el mapa y los nodos ----------
+const PROYECCION_ANCHO = 1000, PROYECCION_ALTO = 500;
+
+const proyeccionMapa = d3.geoNaturalEarth1()
+  .scale(165)
+  .translate([PROYECCION_ANCHO / 2, PROYECCION_ALTO / 2 + 20]);
+
+const generadorRuta = d3.geoPath(proyeccionMapa);
+
+function proyectar(lat, lon) {
+  const punto = proyeccionMapa([lon, lat]);
+  return { x: punto[0], y: punto[1] };
+}
+
+// mapea cada nodo a un país (código ISO numérico) para poder resaltarlo en el mapa
+const NODO_A_ISO = {
+  EUR: "056", JPY: "392", GBP: "826", CNY: "156",
+  "CL=F": "840", "BZ=F": "578",
+  "GC=F": "826", "NG=F": "840", "^TNX": "840",
+  USA: "840", CHINA: "156", UE: "056", JAPON: "392", RUSIA: "643",
+  BRL: "076", MXN: "484", ZAR: "710",
+  "HG=F": "152", "KC=F": "076", "ZS=F": "032", "PL=F": "710",
+};
+
+function resaltarPaisPorIso(svg, iso) {
+  svg.querySelectorAll(`.continente[data-id="${iso}"]`).forEach((p) => p.classList.add("continente--resaltado"));
+}
+
+function centroDeNodo(svg, id) {
+  const forma = svg.querySelector(`.nodo-correlacion[data-id="${CSS.escape(id)}"] .nodo-forma`);
+  if (!forma) return null;
+  const caja = forma.getBBox();
+  return { x: caja.x + caja.width / 2, y: caja.y + caja.height / 2 };
+}
+
+function quitarResaltadoPais(svg) {
+  svg.querySelectorAll(".continente--resaltado").forEach((p) => p.classList.remove("continente--resaltado"));
+}
+
+function dispararSenalAlerta(idA, idB) {
+  const svg = document.getElementById("grafo-correlaciones");
+  const pA = centroDeNodo(svg, idA), pB = centroDeNodo(svg, idB);
+  if (!pA || !pB) return;
+  const capa = svg.querySelector(".capa-zoom");
+  const senal = crearSVGEl("circle", { r: 4, class: "senal-alerta" });
+  senal.style.offsetPath = `path('M ${pA.x} ${pA.y} L ${pB.x} ${pB.y}')`;
+  capa.appendChild(senal);
+  senal.addEventListener("animationend", () => senal.remove());
+}
+
+let capaMapaLista = null;
+
+// reserva, sincrónicamente, el orden de las capas (fondo → mapa vacío) antes
+// de que llegue el mapa real por red; así el orden de dibujado nunca falla
+// sin importar cuándo resuelve el fetch
+function prepararCapas(svg) {
+  if (svg.dataset.capasListas) return;
+  svg.dataset.capasListas = "1";
+
+  const defs = crearSVGEl("defs", {});
+      defs.innerHTML = `
+    <linearGradient id="degradeOceano" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1c3d52" />
+      <stop offset="100%" stop-color="#0f2839" />
+    </linearGradient>
+    <radialGradient id="brilloNodo" cx="35%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.6" />
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+    <filter id="resplandorNodo" x="-120%" y="-120%" width="340%" height="340%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="difuminado" />
+      <feMerge>
+        <feMergeNode in="difuminado" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  `;
+
+  const capaZoom = crearSVGEl("g", { class: "capa-zoom" });
+
+  const capaFondo = crearSVGEl("g", { class: "capa-fondo" });
+  capaFondo.appendChild(crearSVGEl("rect", {
+    x: 0, y: 0, width: PROYECCION_ANCHO, height: PROYECCION_ALTO,
+    fill: "url(#degradeOceano)",
+  }));
+
+  const capaMapaVacia = crearSVGEl("g", { class: "capa-mapa" });
+
+  capaZoom.append(capaFondo, capaMapaVacia);
+  svg.append(defs, capaZoom);
+
+  configurarZoom(svg, capaZoom);
+}
+
+function configurarZoom(svg, capaZoom) {
+  const zoomComportamiento = d3.zoom()
+    .scaleExtent([1, 8])
+    .on("zoom", (evento) => {
+      capaZoom.setAttribute("transform", evento.transform.toString());
+
+      // los nodos no crecen con el mapa: se contra-escalan para mantener su tamaño en pantalla
+      const escalaInversa = 1 / evento.transform.k;
+      capaZoom.querySelectorAll(".nodo-correlacion").forEach((nodo) => {
+        nodo.style.transform = `scale(${escalaInversa})`;
+      });
+    });
+
+  d3.select(svg).call(zoomComportamiento).on("dblclick.zoom", null);
+  svg._zoomD3 = zoomComportamiento;
+
+  document.getElementById("zoom-mas").addEventListener("click", () =>
+    d3.select(svg).transition().duration(200).call(zoomComportamiento.scaleBy, 1.4));
+  document.getElementById("zoom-menos").addEventListener("click", () =>
+    d3.select(svg).transition().duration(200).call(zoomComportamiento.scaleBy, 1 / 1.4));
+  document.getElementById("zoom-reset").addEventListener("click", () =>
+    d3.select(svg).transition().duration(300).call(zoomComportamiento.transform, d3.zoomIdentity));
+}
+
+function volarHaciaNodo(idNodo) {
+  const svg = document.getElementById("grafo-correlaciones");
+  const idsAccion = new Set(datosCorrelacion.nodos.filter((n) => n.grupo === GRUPO_ACCIONES_ID).map((n) => n.id));
+
+  if (idsAccion.has(idNodo) && !clusterExpandido) {
+    clusterExpandido = true;
+    dibujarGrafo(svg, datosCorrelacion);
+    aplicarFiltroCategorias();
+  }
+
+  const grupo = svg.querySelector(`.nodo-correlacion[data-id="${CSS.escape(idNodo)}"]`);
+  if (!grupo) return;
+
+  const forma = grupo.querySelector(".nodo-forma");
+  const caja = forma.getBBox();
+  const cx = caja.x + caja.width / 2, cy = caja.y + caja.height / 2;
+  const escala = 3;
+
+  d3.select(svg).transition().duration(600).call(
+    svg._zoomD3.transform,
+    d3.zoomIdentity.translate(PROYECCION_ANCHO / 2, PROYECCION_ALTO / 2).scale(escala).translate(-cx, -cy)
+  );
+
+  grupo.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+}
+
+function cargarMapaBase(svg) {
+  if (capaMapaLista) return capaMapaLista;
+  prepararCapas(svg);
+
+  capaMapaLista = fetch("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json")
+    .then((r) => r.json())
+    .then((topologia) => {
+      const paises = topojson.feature(topologia, topologia.objects.countries);
+      const capa = svg.querySelector(".capa-mapa");
+
+      capa.appendChild(crearSVGEl("path", {
+        d: generadorRuta(d3.geoGraticule().step([20, 20])()),
+        class: "graticula",
+      }));
+
+      paises.features.forEach((pais) => {
+        const ruta = generadorRuta(pais);
+        if (!ruta) return;
+        const trazo = crearSVGEl("path", { d: ruta, class: "continente" });
+        trazo.dataset.id = pais.id;
+        capa.appendChild(trazo);
+      });
+    })
+    .catch((error) => console.error("No se pudo cargar el mapa base:", error));
+
+  return capaMapaLista;
+}
+
+// ---------- clúster expandible de empresas de EE. UU. ----------
+const GRUPO_ACCIONES_ID = "acciones_usa";
+const POSICION_FLOTANTE = { x: 55, y: 455 };  // nodo sin país (sentimiento global)
+const RADIO_ABANICO_CLUSTER = 55;
+let clusterExpandido = false;
+
+const CARTERA_CLAVE = "g20vix_cartera";
+function obtenerCartera() {
+  try { return JSON.parse(localStorage.getItem(CARTERA_CLAVE) || "{}"); }
+  catch { return {}; }
+}
+function guardarCartera(obj) {
+  localStorage.setItem(CARTERA_CLAVE, JSON.stringify(obj));
+}
+let cartera = obtenerCartera();
+
+function calcularPronosticoActivo(id) {
+  if (!datosCorrelacion) return null;
+  const nodo = datosCorrelacion.nodos.find((n) => n.id === id);
+  if (!nodo) return null;
+
+  const relacionados = datosCorrelacion.pares
+    .filter((p) => p.a === id || p.b === id)
+    .map((p) => {
+      const otroId = p.a === id ? p.b : p.a;
+      const otro = datosCorrelacion.nodos.find((n) => n.id === otroId);
+      return otro ? { otro, correlacion: p.valor } : null;
+    })
+    .filter(Boolean)
+    .sort((x, y) => Math.abs(y.correlacion) - Math.abs(x.correlacion))
+    .slice(0, 6);
+
+  if (relacionados.length === 0) {
+    return { movimiento: 0, confianza: 0, semaforo: "neutral", factores: [] };
+  }
+
+  let sumaPonderada = 0, sumaPesos = 0;
+  relacionados.forEach(({ otro, correlacion }) => {
+    const esEscalaDirecta = otro.tipo === "sentimiento" || otro.categoria === "politico";
+    const movimientoOtro = esEscalaDirecta ? otro.variacion : otro.variacion / 100;
+    sumaPonderada += correlacion * movimientoOtro;
+    sumaPesos += Math.abs(correlacion);
+  });
+
+  const movimientoEsperado = sumaPesos > 0 ? (sumaPonderada / sumaPesos) * 100 : 0;
+  const confianza = Math.min(100, Math.round((sumaPesos / relacionados.length) * 100));
+
+  const volatilidad = nodo.volatilidad || 1;
+  let semaforo = "neutral";
+  if (movimientoEsperado > volatilidad * 0.3) semaforo = "alcista";
+  else if (movimientoEsperado < -volatilidad * 0.3) semaforo = "bajista";
+
+  return { movimiento: movimientoEsperado, confianza, semaforo, factores: relacionados };
+}
+
+function poblarSelectorCartera(datos) {
+  const select = document.getElementById("cartera-selector");
+  if (select.options.length) return;
+  datos.nodos.forEach((n) => {
+    const opcion = document.createElement("option");
+    opcion.value = n.id;
+    opcion.textContent = `${n.id} — ${n.nombre}`;
+    select.appendChild(opcion);
+  });
+}
+
+function pintarCartera() {
+  const contenedor = document.getElementById("cartera-lista");
+  if (!datosCorrelacion) { contenedor.innerHTML = "<p class='cartera__vacio'>Cargando datos…</p>"; return; }
+
+  const entradas = Object.entries(cartera);
+  if (entradas.length === 0) {
+    contenedor.innerHTML = "<p class='cartera__vacio'>Todavía no agregaste ningún activo.</p>";
+    return;
+  }
+
+  const iconos = { alcista: "🟢", neutral: "🟡", bajista: "🔴" };
+  const etiquetas = { alcista: "Alcista", neutral: "Neutral", bajista: "Bajista" };
+
+  contenedor.innerHTML = entradas.map(([id, monto]) => {
+    const nodo = datosCorrelacion.nodos.find((n) => n.id === id);
+    const nombre = nodo ? nodo.nombre : id;
+    const pronostico = calcularPronosticoActivo(id);
+
+    if (!pronostico) {
+      return `<div class="cartera-item"><span class="cartera-item__nombre">${nombre}</span><span class="cartera-item__factores">Sin datos suficientes todavía</span></div>`;
+    }
+
+    const factoresTexto = pronostico.factores.slice(0, 3)
+      .map((f) => `${f.otro.nombre} (${f.correlacion >= 0 ? "+" : ""}${f.correlacion.toFixed(2)})`)
+      .join(", ");
+
+    return `
+      <div class="cartera-item">
+        <div class="cartera-item__cabecera">
+          <span class="cartera-item__semaforo">${iconos[pronostico.semaforo]} ${etiquetas[pronostico.semaforo]}</span>
+          <span class="cartera-item__nombre">${nombre}</span>
+          <button type="button" class="cartera-item__quitar" data-id="${id}">✕</button>
+        </div>
+        <div class="cartera-item__monto">Invertido: ${monto}</div>
+        <div class="cartera-item__detalle">
+          Movimiento esperado: <strong>${pronostico.movimiento >= 0 ? "+" : ""}${pronostico.movimiento.toFixed(2)}%</strong>
+          · Confianza: <strong>${pronostico.confianza}%</strong>
+        </div>
+        <div class="cartera-item__factores">Principales factores: ${factoresTexto || "—"}</div>
+      </div>`;
+  }).join("");
+
+  contenedor.querySelectorAll(".cartera-item__quitar").forEach((boton) => {
+    boton.addEventListener("click", () => {
+      delete cartera[boton.dataset.id];
+      guardarCartera(cartera);
+      pintarCartera();
+    });
+  });
+}
+
+const FAVORITOS_CLAVE = "g20vix_favoritos";
+function obtenerFavoritos() {
+  try { return new Set(JSON.parse(localStorage.getItem(FAVORITOS_CLAVE) || "[]")); }
+  catch { return new Set(); }
+}
+function guardarFavoritos(set) {
+  localStorage.setItem(FAVORITOS_CLAVE, JSON.stringify([...set]));
+}
+let favoritos = obtenerFavoritos();
+
+// cuando el clúster está colapsado, funde en un solo id las aristas que
+// tocan una acción individual, y descarta las que quedarían "internas"
+function prepararAristas(paresOriginales, idsAccion, posiciones) {
+  if (clusterExpandido) {
+    return paresOriginales.filter((par) => posiciones[par.a] && posiciones[par.b]);
+  }
+  const combinadas = new Map();
+  paresOriginales.forEach((par) => {
+    const idA = idsAccion.has(par.a) ? "__cluster_acciones" : par.a;
+    const idB = idsAccion.has(par.b) ? "__cluster_acciones" : par.b;
+    if (idA === idB) return;
+    const clave = [idA, idB].sort().join("|");
+    const actual = combinadas.get(clave);
+    if (!actual || Math.abs(par.valor) > Math.abs(actual.valor)) {
+      combinadas.set(clave, { a: idA, b: idB, valor: par.valor });
+    }
+  });
+  return [...combinadas.values()].filter((par) => posiciones[par.a] && posiciones[par.b]);
+}
+
+function resolverColisiones(posiciones, radios, iteraciones = 40, separacionExtra = 6) {
+  const ids = Object.keys(posiciones);
+  for (let iter = 0; iter < iteraciones; iter++) {
+    let movimiento = false;
+    for (let i = 0; i < ids.length; i++) {
+      for (let j = i + 1; j < ids.length; j++) {
+        const idA = ids[i], idB = ids[j];
+        const pa = posiciones[idA], pb = posiciones[idB];
+        let dx = pb.x - pa.x, dy = pb.y - pa.y;
+        let dist = Math.hypot(dx, dy);
+        const minDist = (radios[idA] || 22) + (radios[idB] || 22) + separacionExtra;
+        if (dist < minDist) {
+          movimiento = true;
+          if (dist < 0.01) { dx = Math.random() - 0.5; dy = Math.random() - 0.5; dist = Math.hypot(dx, dy) || 1; }
+          const empuje = (minDist - dist) / 2;
+          const ux = dx / dist, uy = dy / dist;
+          pa.x -= ux * empuje; pa.y -= uy * empuje;
+          pb.x += ux * empuje; pb.y += uy * empuje;
+        }
+      }
+    }
+    if (!movimiento) break;
+  }
+}
+
+// ---------- geografía económica ilustrada (capa decorativa, activable) ----------
+const FEATURES_GEO = [
+  {
+    id: "andes", tipo: "cordillera", nombre: "Cordillera de los Andes",
+    detalle: "Principal fuente mundial de cobre y litio",
+    puntos: [[10, -75], [-15, -71], [-33, -70], [-45, -72]],
+    nodoRelacionado: "HG=F",
+  },
+  {
+    id: "himalaya", tipo: "cordillera", nombre: "Himalaya",
+    detalle: "Frontera geopolítica entre India y China",
+    puntos: [[35, 74], [29, 84], [27, 92]],
+  },
+  {
+    id: "rocosas", tipo: "cordillera", nombre: "Montañas Rocosas",
+    detalle: "Reservas de gas y petróleo de esquisto (shale)",
+    puntos: [[49, -114], [40, -106], [33, -106]],
+    nodoRelacionado: "NG=F",
+  },
+  {
+    id: "amazonas", tipo: "rio", nombre: "Río Amazonas",
+    detalle: "La mayor cuenca hidrográfica y de biodiversidad del mundo",
+    puntos: [[-4.5, -73], [-3, -65], [-1.5, -55], [-0.5, -50]],
+  },
+  {
+    id: "nilo", tipo: "rio", nombre: "Río Nilo",
+    detalle: "Fuente de agua y tensión geopolítica en el noreste de África",
+    puntos: [[1.5, 31], [15, 32.5], [24, 32.8], [30, 31]],
+  },
+  {
+    id: "mississippi", tipo: "rio", nombre: "Río Misisipi",
+    detalle: "Corredor clave de exportación agrícola de EE. UU.",
+    puntos: [[47, -95], [38, -90.2], [29, -89.3]],
+    nodoRelacionado: "ZS=F",
+  },
+  {
+    id: "cobre-chile", tipo: "mina", nombre: "Cinturón del cobre chileno",
+    detalle: "Chile concentra cerca de un cuarto de la producción mundial de cobre",
+    puntos: [[-24, -69.5]],
+    nodoRelacionado: "HG=F",
+  },
+  {
+    id: "oro-sudafrica", tipo: "mina", nombre: "Cuenca de Witwatersrand",
+    detalle: "Una de las mayores reservas históricas de oro del mundo",
+    puntos: [[-26.2, 27.9]],
+    nodoRelacionado: "GC=F",
+  },
+  {
+    id: "litio-triangulo", tipo: "mina", nombre: "Triángulo del litio",
+    detalle: "Chile, Argentina y Bolivia concentran gran parte del litio mundial",
+    puntos: [[-23, -67.5]],
+  },
+  {
+    id: "golfo-persico", tipo: "petroleo", nombre: "Golfo Pérsico",
+    detalle: "La región con mayores reservas probadas de petróleo del mundo",
+    puntos: [[27, 51]],
+    nodoRelacionado: "BZ=F",
+  },
+  {
+    id: "cuenca-permica", tipo: "petroleo", nombre: "Cuenca Pérmica",
+    detalle: "El mayor yacimiento de esquisto de Estados Unidos",
+    puntos: [[31.8, -102.5]],
+    nodoRelacionado: "CL=F",
+  },
+  {
+    id: "mar-norte", tipo: "petroleo", nombre: "Mar del Norte",
+    detalle: "Cuenca petrolera histórica de Europa (referencia del Brent)",
+    puntos: [[59.5, 1.5]],
+    nodoRelacionado: "BZ=F",
+  },
+];
+
+function trazarLinea(puntos) {
+  return puntos.map((p) => proyectar(p[0], p[1])).map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
+}
+
+function iconoCordillera(cx, cy) {
+  return `<polyline points="${cx - 9},${cy + 5} ${cx - 4},${cy - 6} ${cx},${cy} ${cx + 4},${cy - 7} ${cx + 9},${cy + 5}" />`;
+}
+
+function iconoMina(cx, cy) {
+  return `
+    <line x1="${cx - 5}" y1="${cy + 6}" x2="${cx + 4}" y2="${cy - 6}" />
+    <line x1="${cx - 6}" y1="${cy - 3}" x2="${cx - 1}" y2="${cy - 8}" />
+    <path class="relleno-suave" d="M ${cx - 8} ${cy + 6} L ${cx} ${cy - 3} L ${cx + 8} ${cy + 6} Z" />
+  `;
+}
+
+function iconoPetroleo(cx, cy) {
+  return `
+    <line x1="${cx}" y1="${cy - 10}" x2="${cx}" y2="${cy + 6}" />
+    <line x1="${cx - 6}" y1="${cy + 6}" x2="${cx}" y2="${cy - 10}" />
+    <line x1="${cx + 6}" y1="${cy + 6}" x2="${cx}" y2="${cy - 10}" />
+    <line x1="${cx - 7}" y1="${cy + 6}" x2="${cx + 7}" y2="${cy + 6}" />
+  `;
+}
+
+function crearFeatureGeo(feature) {
+  const grupo = crearSVGEl("g", { class: `feature-geo feature-geo--${feature.tipo}`, "data-id": feature.id });
+  const centro = proyectar(feature.puntos[0][0], feature.puntos[0][1]);
+
+  if (feature.tipo === "rio") {
+    const polilinea = crearSVGEl("polyline", { points: trazarLinea(feature.puntos) });
+    grupo.appendChild(polilinea);
+  } else if (feature.tipo === "cordillera") {
+    grupo.innerHTML = iconoCordillera(centro.x, centro.y);
+    if (feature.puntos.length > 1) {
+      const cresta = crearSVGEl("polyline", { points: trazarLinea(feature.puntos), "stroke-dasharray": "1 4", opacity: "0.5" });
+      grupo.appendChild(cresta);
+    }
+  } else if (feature.tipo === "mina") {
+    grupo.innerHTML = iconoMina(centro.x, centro.y);
+  } else if (feature.tipo === "petroleo") {
+    grupo.innerHTML = iconoPetroleo(centro.x, centro.y);
+  }
+
+  const etiqueta = crearSVGEl("text", {
+    x: centro.x.toFixed(1), y: (centro.y + 16).toFixed(1),
+    "text-anchor": "middle", class: "feature-geo__etiqueta",
+  });
+  etiqueta.textContent = feature.nombre;
+  grupo.appendChild(etiqueta);
+
+  const titulo = crearSVGEl("title", {});
+  titulo.textContent = `${feature.nombre} — ${feature.detalle}`;
+  grupo.appendChild(titulo);
+
+  if (feature.nodoRelacionado) {
+    grupo.addEventListener("mouseenter", () => {
+      const svg = document.getElementById("grafo-correlaciones");
+      svg.querySelector(`.nodo-correlacion[data-id="${CSS.escape(feature.nodoRelacionado)}"] .nodo-forma`)
+        ?.setAttribute("stroke", "#1256a0");
+    });
+    grupo.addEventListener("mouseleave", () => {
+      const svg = document.getElementById("grafo-correlaciones");
+      svg.querySelector(`.nodo-correlacion[data-id="${CSS.escape(feature.nodoRelacionado)}"] .nodo-forma`)
+        ?.removeAttribute("stroke");
+    });
+  }
+
+  return grupo;
+}
+
+let geografiaActiva = false;
+let capaGeografia = null;
+
+function alternarCapaGeografia() {
+  const svg = document.getElementById("grafo-correlaciones");
+  const boton = document.getElementById("boton-geografia");
+  geografiaActiva = !geografiaActiva;
+  boton.classList.toggle("activo", geografiaActiva);
+
+  if (geografiaActiva) {
+    if (!capaGeografia) {
+      capaGeografia = crearSVGEl("g", { class: "capa-geografia" });
+      FEATURES_GEO.forEach((f) => capaGeografia.appendChild(crearFeatureGeo(f)));
+    }
+    svg.querySelector(".capa-zoom")?.appendChild(capaGeografia);
+  } else {
+    capaGeografia?.remove();
+  }
+}
+
+document.getElementById("boton-geografia").addEventListener("click", alternarCapaGeografia);
+
+function dibujarGrafo(svg, datos) {
+  cargarMapaBase(svg);  
+  svg.querySelector(".capa-dinamica")?.remove();
+  const capaDinamica = crearSVGEl("g", { class: "capa-dinamica" });
+  const maxCentralidad = Math.max(1, ...datos.nodos.map((n) => n.centralidad || 0));
+  const maxTendencia = Math.max(0, ...datos.nodos.map((n) => n.volumen_tendencia || 0));
+  const idsAccion = new Set(datos.nodos.filter((n) => n.grupo === GRUPO_ACCIONES_ID).map((n) => n.id));
+  const nodosAccion = datos.nodos.filter((n) => idsAccion.has(n.id));
+  const anclaAcciones = nodosAccion.length ? proyectar(nodosAccion[0].lat, nodosAccion[0].lon) : null;
+
+  // posiciona todo lo que no sea una acción individual (monedas, líderes, commodities, sentimiento)
+  const posiciones = {};
+  datos.nodos.forEach((nodo) => {
+    if (idsAccion.has(nodo.id)) return;
+    posiciones[nodo.id] = nodo.lat != null && nodo.lon != null ? proyectar(nodo.lat, nodo.lon) : POSICION_FLOTANTE;
+  });
+
+  // resuelve las acciones según el estado del clúster: colapsado (un solo punto)
+  // o expandido (abanico alrededor del ancla geográfica)
+  if (anclaAcciones) {
+    if (clusterExpandido) {
+      nodosAccion.forEach((nodo, i) => {
+        const angulo = (i / nodosAccion.length) * 2 * Math.PI;
+        posiciones[nodo.id] = {
+          x: anclaAcciones.x + RADIO_ABANICO_CLUSTER * Math.cos(angulo),
+          y: anclaAcciones.y + RADIO_ABANICO_CLUSTER * Math.sin(angulo),
+        };
+      });
+    } else {
+      posiciones["__cluster_acciones"] = anclaAcciones;
+    }
+  }
+
+  const radiosPorId = {};
+  Object.keys(posiciones).forEach((id) => {
+    if (id === "__cluster_acciones") radiosPorId[id] = 30;
+    else if (idsAccion.has(id)) radiosPorId[id] = 16;
+    else radiosPorId[id] = 22;
+  });
+  resolverColisiones(posiciones, radiosPorId);
+
+  const aristas = prepararAristas(datos.pares || [], idsAccion, posiciones);
+
+  const nodosDibujo = (clusterExpandido || !nodosAccion.length)
+    ? datos.nodos
+    : [
+        ...datos.nodos.filter((n) => !idsAccion.has(n.id)),
+        {
+          id: "__cluster_acciones",
+          nombre: `${nodosAccion.length} empresas (EE. UU.)`,
+          tipo: "accion",
+          categoria: "economico",
+          variacion: nodosAccion.reduce((s, n) => s + n.variacion, 0) / nodosAccion.length,
+          volatilidad: Math.max(...nodosAccion.map((n) => n.volatilidad || 0)),
+          esCluster: true,
+          cantidad: nodosAccion.length,
+        },
+      ];
+
+  const capaAristas = crearSVGEl("g", {});
+  const capaNodos = crearSVGEl("g", {});
+  const capaEtiquetas = crearSVGEl("g", {});
+
+  [...aristas].sort((a, b) => Math.abs(a.valor) - Math.abs(b.valor)).forEach((par) => {
+    const p1 = posiciones[par.a], p2 = posiciones[par.b];
+    if (!p1 || !p2) return;
+    const fuerza = Math.abs(par.valor);
+
+    const linea = crearSVGEl("line", {
+      class: "arista-correlacion",
+      x1: p1.x.toFixed(1), y1: p1.y.toFixed(1),
+      x2: p2.x.toFixed(1), y2: p2.y.toFixed(1),
+      stroke: par.valor >= 0 ? "#0f8a4f" : "#c62828",
+      "stroke-width": (0.5 + fuerza * 4).toFixed(2),
+      opacity: (0.06 + fuerza * 0.55).toFixed(2),
+    });
+        linea.dataset.a = par.a;
+    linea.dataset.b = par.b;
+    linea.dataset.valor = fuerza.toFixed(3);
+
+    const titulo = crearSVGEl("title", {});
+    titulo.textContent = `${par.a} – ${par.b}: ${par.valor >= 0 ? "+" : ""}${par.valor.toFixed(2)}`;
+    linea.appendChild(titulo);
+
+    // valor flotante del r de Pearson, oculto hasta que se activa el nodo o se pasa el cursor por la línea
+    const dx = p2.x - p1.x, dy = p2.y - p1.y;
+    const largo = Math.hypot(dx, dy) || 1;
+    const nx = -dy / largo, ny = dx / largo;
+    const mx = (p1.x + p2.x) / 2 + nx * 10, my = (p1.y + p2.y) / 2 + ny * 10;
+    const etiquetaValor = crearSVGEl("text", { x: mx.toFixed(1), y: my.toFixed(1), "text-anchor": "middle", class: "arista-etiqueta" });
+    etiquetaValor.textContent = `${par.valor >= 0 ? "+" : ""}${par.valor.toFixed(2)}`;
+    linea._etiqueta = etiquetaValor;
+
+    linea.addEventListener("mouseenter", () => etiquetaValor.classList.add("activa"));
+    linea.addEventListener("mouseleave", () => etiquetaValor.classList.remove("activa"));
+  });
+
+  function resaltar(idActivo) {
+    capaAristas.querySelectorAll(".arista-correlacion").forEach((linea) => {
+      const toca = linea.dataset.a === idActivo || linea.dataset.b === idActivo;
+      linea.classList.toggle("atenuada", !toca);
+      linea._etiqueta?.classList.toggle("activa", toca);
+    });
+  }
+  function quitarResaltado() {
+    capaAristas.querySelectorAll(".arista-correlacion").forEach((linea) => {
+      linea.classList.remove("atenuada");
+      linea._etiqueta?.classList.remove("activa");
+    });
+  }
+
+  nodosDibujo.forEach((nodo) => {
+    const pos = posiciones[nodo.id];
+    if (!pos) return;
+    const esHexagono = nodo.tipo === "accion";
+    const categoria = nodo.categoria || "economico";
+    const riesgo = Math.min(8, 2 + Math.abs(nodo.volatilidad || 0) * 1.3).toFixed(1);
+    const esTendencia = maxTendencia > 0 && nodo.volumen_tendencia === maxTendencia;
+    const grupo = crearSVGEl("g", {
+      class: `nodo-correlacion ${esHexagono ? "nodo-periferia" : "nodo-nucleo"} categoria-${categoria}${esTendencia ? " tendencia-alta" : ""}`,
+      tabindex: "0",
+      role: "button",
+      "aria-label": nodo.esCluster ? `Ver las ${nodo.cantidad} empresas de EE. UU.` : `Ver correlaciones de ${nodo.nombre}`,
+      "data-id": nodo.id,
+    });
+
+    // el grosor del borde representa el riesgo/regulación; el color del borde (ver CSS)
+    // representa la categoría: económico, político o social
+   
+    const radioForma = nodo.esCluster ? 30 : (esHexagono ? 16 : 22);
+        const forma = esHexagono
+      ? crearSVGEl("polygon", { points: hexagono(pos.x, pos.y, radioForma), class: "nodo-forma", fill: nodo.color_marca || "#111827", "stroke-width": riesgo, "vector-effect": "non-scaling-stroke" })
+      : crearSVGEl("circle", { cx: pos.x.toFixed(1), cy: pos.y.toFixed(1), r: radioForma, class: "nodo-forma", fill: nodo.color_marca || "#1256a0", "stroke-width": riesgo, "vector-effect": "non-scaling-stroke" });
+
+    // brillo tipo "burbuja" superpuesto, misma forma un poco más chica
+    const brillo = esHexagono
+      ? crearSVGEl("polygon", { points: hexagono(pos.x, pos.y, radioForma * 0.85), fill: "url(#brilloNodo)", "pointer-events": "none" })
+      : crearSVGEl("circle", { cx: pos.x.toFixed(1), cy: pos.y.toFixed(1), r: radioForma * 0.85, fill: "url(#brilloNodo)", "pointer-events": "none" });
+
+    // resplandor para los nodos más "centrales" (los que más correlacionan con el resto)
+    if (!nodo.esCluster && maxCentralidad > 0 && nodo.centralidad / maxCentralidad >= 0.6) {
+      forma.setAttribute("filter", "url(#resplandorNodo)");
+    }
+
+    const etiqueta = crearSVGEl("text", { x: pos.x.toFixed(1), y: (pos.y + 4).toFixed(1), "text-anchor": "middle", class: "nodo-etiqueta" });
+    etiqueta.textContent = nodo.esCluster ? `+${nodo.cantidad}` : nodo.id;
+
+        // badge: en divisas/commodities/empresas es el Δ% de precio diario;
+    // en nodos políticos y de sentimiento, "variacion" es un puntaje de -1 a +1, no un porcentaje
+    const cambio = nodo.variacion;
+    const esSentimiento = nodo.tipo === "sentimiento";
+    let textoBadge = "";
+    let subeBadge = cambio >= 0;
+    if (typeof cambio === "number") {
+      if (esSentimiento) {
+        const etiquetaSentimiento = cambio >= 0.15 ? "Positivo" : cambio <= -0.15 ? "Negativo" : "Neutral";
+        textoBadge = `${etiquetaSentimiento} (${cambio >= 0 ? "+" : ""}${cambio.toFixed(2)})`;
+        subeBadge = cambio > 0.05 ? true : cambio < -0.05 ? false : null;
+      } else {
+        textoBadge = `${cambio >= 0 ? "+" : ""}${cambio.toFixed(2)}%`;
+      }
+    }
+    const badge = crearSVGEl("text", {
+      x: pos.x.toFixed(1),
+      y: (pos.y + radioForma + 13).toFixed(1),
+      "text-anchor": "middle",
+      class: `nodo-badge ${subeBadge === null ? "" : subeBadge ? "nodo-badge--sube" : "nodo-badge--baja"}`,
+    });
+    badge.textContent = textoBadge;
+
+    if (nodo.macro) {
+      const partes = [];
+      if (nodo.macro.pib) partes.push(`PIB: ${nodo.macro.pib.valor}% (${nodo.macro.pib.anio})`);
+      if (nodo.macro.inflacion) partes.push(`Inflación: ${nodo.macro.inflacion.valor}% (${nodo.macro.inflacion.anio})`);
+      if (nodo.macro.desempleo) partes.push(`Desempleo: ${nodo.macro.desempleo.valor}% (${nodo.macro.desempleo.anio})`);
+      if (nodo.macro.tasa_interes) partes.push(`Tasa de interés real: ${nodo.macro.tasa_interes.valor}% (${nodo.macro.tasa_interes.anio})`);
+      if (partes.length) {
+        const tituloMacro = crearSVGEl("title", {});
+        tituloMacro.textContent = partes.join(" · ");
+        grupo.appendChild(tituloMacro);
+      }
+    }
+
+          const hijosNodo = [forma, brillo];
+    if (favoritos.has(nodo.id)) {
+      const anillo = esHexagono
+        ? crearSVGEl("polygon", { points: hexagono(pos.x, pos.y, radioForma + 5), class: "anillo-favorito" })
+        : crearSVGEl("circle", { cx: pos.x.toFixed(1), cy: pos.y.toFixed(1), r: radioForma + 5, class: "anillo-favorito" });
+      hijosNodo.push(anillo);
+    }
+
+if (nodo.bandera) {
+  const banderaEl = crearSVGEl("text", {
+    x: (pos.x + radioForma * 0.72).toFixed(1),
+    y: (pos.y - radioForma * 0.72).toFixed(1),
+    "text-anchor": "middle",
+    "font-size": Math.max(10, Math.round(radioForma * 0.55)),
+    class: "nodo-bandera",
+  });
+  banderaEl.textContent = nodo.bandera;
+  hijosNodo.push(banderaEl);
+}
+
+if (esTendencia) {
+  const iconoTendencia = crearSVGEl("text", {
+    x: (pos.x - radioForma * 0.72).toFixed(1),
+    y: (pos.y - radioForma * 0.72).toFixed(1),
+    "text-anchor": "middle",
+    "font-size": Math.max(10, Math.round(radioForma * 0.55)),
+    class: "nodo-tendencia-icono",
+  });
+  iconoTendencia.textContent = "🔥";
+  hijosNodo.push(iconoTendencia);
+}
+
+    hijosNodo.push(etiqueta, badge);
+    grupo.append(...hijosNodo);  
+
+    const isoPais = (nodo.grupo === GRUPO_ACCIONES_ID || nodo.esCluster) ? "840" : NODO_A_ISO[nodo.id];
+
+    grupo.addEventListener("mouseenter", () => { resaltar(nodo.id); if (isoPais) resaltarPaisPorIso(svg, isoPais); });
+    grupo.addEventListener("focus", () => { resaltar(nodo.id); if (isoPais) resaltarPaisPorIso(svg, isoPais); });
+    grupo.addEventListener("mouseleave", () => { quitarResaltado(); quitarResaltadoPais(svg); });
+    grupo.addEventListener("blur", () => { quitarResaltado(); quitarResaltadoPais(svg); });
+
+    if (nodo.esCluster) {
+      // clic para desplegar el abanico de empresas alrededor de su ubicación real
+    grupo.addEventListener("click", () => { clusterExpandido = true; dibujarGrafo(svg, datosCorrelacion); aplicarFiltroCategorias(); });
+    } else {
+      grupo.addEventListener("click", () => {
+        resaltar(nodo.id);   // funciona también al tocar en el celular
+        mostrarResena(nodo);
+      });
+    }
+
+    capaNodos.appendChild(grupo);
+  });
+
+  if (clusterExpandido && anclaAcciones) {
+    const cerrar = crearSVGEl("text", {
+      x: anclaAcciones.x.toFixed(1),
+      y: (anclaAcciones.y - RADIO_ABANICO_CLUSTER - 14).toFixed(1),
+      "text-anchor": "middle",
+      class: "cluster-cerrar",
+    });
+    cerrar.textContent = "✕ agrupar empresas";
+    cerrar.addEventListener("click", () => { clusterExpandido = false; dibujarGrafo(svg, datosCorrelacion); aplicarFiltroCategorias(); });
+    capaEtiquetas.appendChild(cerrar);
+  }
+
+    capaDinamica.append(capaAristas, capaNodos, capaEtiquetas);
+    svg.querySelector(".capa-zoom").appendChild(capaDinamica);
+}
+
+function pintarTopCorrelaciones(datos) {
+  const lista = document.getElementById("contagio-top");
+  const principales = [...datos.pares]
+    .sort((a, b) => Math.abs(b.valor) - Math.abs(a.valor))
+    .slice(0, 5);
+
+  lista.replaceChildren(...principales.map((par) => {
+    const item = document.createElement("li");
+    const signo = par.valor >= 0 ? "+" : "";
+    item.innerHTML = `<strong>${par.a} – ${par.b}</strong>: ${signo}${par.valor.toFixed(2)}`;
+    return item;
+  }));
+}
+
+async function poblarSelectoresComparador() {
+  try {
+    const respuesta = await fetch("/api/snapshots");
+    if (!respuesta.ok) throw new Error("Respuesta no válida");
+    const fechas = await respuesta.json();
+    if (fechas.length < 2) return;   // hace falta al menos 2 días de historial
+
+    const desde = document.getElementById("comparador-desde");
+    const hasta = document.getElementById("comparador-hasta");
+    const opciones = fechas.map((f) => `<option value="${f}">${f}</option>`).join("");
+    desde.innerHTML = opciones;
+    hasta.innerHTML = opciones;
+    desde.value = fechas[0];
+    hasta.value = fechas[fechas.length - 1];
+  } catch (error) {
+    console.error("No se pudieron cargar los snapshots:", error);
+  }
+}
+
+async function cargarAlertas() {
+  const contenedor = document.getElementById("alertas-contagio");
+  try {
+    const respuesta = await fetch("/api/alertas");
+    if (!respuesta.ok) throw new Error("Respuesta no válida");
+    const datos = await respuesta.json();
+
+    if (datos.alertas.length === 0) {
+      const motivo = datos.dias_historial < 4
+        ? `Se necesitan al menos ${4 - datos.dias_historial} día(s) más de historial para detectar anomalías.`
+        : "Sin correlaciones fuera de lo habitual hoy.";
+      contenedor.innerHTML = `<p class="alertas-contagio__vacio">${motivo}</p>`;
+      return;
+    }
+
+    contenedor.innerHTML = datos.alertas.map((a) => {
+      datos.alertas.forEach((a, i) => {
+      setTimeout(() => dispararSenalAlerta(a.a, a.b), i * 300);
+      });
+      const icono = a.cambio_de_signo ? "🔁" : "⚠️";
+      const detalle = a.cambio_de_signo
+        ? `Cambió de signo respecto al día anterior · promedio histórico ${a.promedio_historico >= 0 ? "+" : ""}${a.promedio_historico}`
+        : `Hoy ${a.valor_hoy >= 0 ? "+" : ""}${a.valor_hoy.toFixed(2)} frente a un promedio histórico de ${a.promedio_historico >= 0 ? "+" : ""}${a.promedio_historico} (${Math.abs(a.z)} desvíos, ${a.dias_historial} días de historial)`;
+      return `
+        <div class="alerta-item">
+          <span class="alerta-item__icono">${icono}</span>
+          <span class="alerta-item__texto">
+            <strong>${a.nombre_a} – ${a.nombre_b}</strong>
+            <span class="alerta-item__detalle">${detalle}</span>
+          </span>
+        </div>`;
+    }).join("");
+  } catch (error) {
+    contenedor.innerHTML = '<p class="alertas-contagio__vacio">No se pudieron cargar las alertas.</p>';
+  }
+}
+
+async function leerSnapshot(fecha) {
+  const respuesta = await fetch(`/api/snapshot/${encodeURIComponent(fecha)}`);
+  if (!respuesta.ok) throw new Error("Snapshot no disponible");
+  return respuesta.json();
+}
+
+function calcularCambios(snapshotA, snapshotB) {
+  const nombres = {};
+  [...snapshotA.nodos, ...snapshotB.nodos].forEach((n) => { nombres[n.id] = n.nombre; });
+
+  const valoresA = {};
+  snapshotA.pares.forEach((p) => { valoresA[[p.a, p.b].sort().join("|")] = p.valor; });
+
+  const cambios = [];
+  snapshotB.pares.forEach((p) => {
+    const clave = [p.a, p.b].sort().join("|");
+    if (!(clave in valoresA)) return;
+    const delta = p.valor - valoresA[clave];
+    cambios.push({ a: p.a, b: p.b, antes: valoresA[clave], despues: p.valor, delta });
+  });
+
+  return { cambios: cambios.sort((x, y) => Math.abs(y.delta) - Math.abs(x.delta)), nombres };
+}
+
+function pintarComparacion(desde, hasta, resultado) {
+  const contenedor = document.getElementById("comparador-resultado");
+  const principales = resultado.cambios.slice(0, 6);
+
+  if (principales.length === 0) {
+    contenedor.innerHTML = `<p>Sin pares en común entre ${desde} y ${hasta}.</p>`;
+    return;
+  }
+
+  const items = principales.map((c) => {
+    const nombreA = resultado.nombres[c.a] || c.a;
+    const nombreB = resultado.nombres[c.b] || c.b;
+    const clase = c.delta >= 0 ? "comparador__sube" : "comparador__baja";
+    const signo = c.delta >= 0 ? "+" : "";
+    return `<li><strong>${nombreA} – ${nombreB}</strong>: ${c.antes.toFixed(2)} → ${c.despues.toFixed(2)}
+      <span class="${clase}">(${signo}${c.delta.toFixed(2)})</span></li>`;
+  }).join("");
+
+  contenedor.innerHTML = `
+    <p>Mayores cambios de correlación entre <strong>${desde}</strong> y <strong>${hasta}</strong>:</p>
+    <ul class="comparador__lista">${items}</ul>`;
+
+  // resalta esos mismos pares sobre el mapa actual, si las aristas existen ahora
+  const svg = document.getElementById("grafo-correlaciones");
+  svg.querySelectorAll(".arista-correlacion").forEach((l) => l.classList.remove("cambio-fuerte"));
+  principales.forEach((c) => {
+    const linea = svg.querySelector(
+      `.arista-correlacion[data-a="${CSS.escape(c.a)}"][data-b="${CSS.escape(c.b)}"], ` +
+      `.arista-correlacion[data-a="${CSS.escape(c.b)}"][data-b="${CSS.escape(c.a)}"]`
+    );
+    linea?.classList.add("cambio-fuerte");
+  });
+}
+
+document.getElementById("comparador-boton").addEventListener("click", async () => {
+  const desde = document.getElementById("comparador-desde").value;
+  const hasta = document.getElementById("comparador-hasta").value;
+  const contenedor = document.getElementById("comparador-resultado");
+  if (!desde || !hasta) return;
+  if (desde === hasta) {
+    contenedor.innerHTML = "<p>Elige dos fechas distintas para comparar.</p>";
+    return;
+  }
+
+  contenedor.innerHTML = "<p>Comparando…</p>";
+  try {
+    const [snapshotA, snapshotB] = await Promise.all([leerSnapshot(desde), leerSnapshot(hasta)]);
+    pintarComparacion(desde, hasta, calcularCambios(snapshotA, snapshotB));
+  } catch (error) {
+    contenedor.innerHTML = "<p>No se pudo completar la comparación.</p>";
+  }
+});
+
+document.getElementById("comparador-reset").addEventListener("click", () => {
+  document.getElementById("comparador-resultado").innerHTML = "";
+  document.getElementById("grafo-correlaciones")
+    .querySelectorAll(".arista-correlacion.cambio-fuerte")
+    .forEach((l) => l.classList.remove("cambio-fuerte"));
+});
+
+async function reproducirEvolucion() {
+  const boton = document.getElementById("reproducir-evolucion");
+  const etiquetaFecha = document.getElementById("reproducir-fecha");
+  if (!datosCorrelacion) return;
+
+  boton.disabled = true;
+  try {
+    const respuesta = await fetch("/api/snapshots");
+    if (!respuesta.ok) throw new Error("Respuesta no válida");
+    const fechas = await respuesta.json();
+    if (fechas.length < 2) {
+      etiquetaFecha.textContent = "No hay suficiente historial todavía.";
+      return;
+    }
+
+    const svg = document.getElementById("grafo-correlaciones");
+    for (const fecha of fechas) {
+      const snap = await leerSnapshot(fecha);
+      // reutiliza los nodos y posiciones actuales, solo cambian las correlaciones de ese día
+      dibujarGrafo(svg, { nodos: datosCorrelacion.nodos, pares: snap.pares });
+      aplicarFiltroCategorias();
+      etiquetaFecha.textContent = fecha;
+      await new Promise((resolver) => setTimeout(resolver, 900));
+    }
+
+    dibujarGrafo(svg, datosCorrelacion);   // vuelve al estado actual
+    aplicarFiltroCategorias();
+    etiquetaFecha.textContent = "";
+  } catch (error) {
+    etiquetaFecha.textContent = "No se pudo reproducir la evolución.";
+  } finally {
+    boton.disabled = false;
+  }
+}
+
+document.getElementById("reproducir-evolucion").addEventListener("click", reproducirEvolucion);
+async function cargarCorrelaciones() {
+  const svg = document.getElementById("grafo-correlaciones");
+  try {
+    const respuesta = await fetch("/api/correlaciones");
+    if (!respuesta.ok) throw new Error("Respuesta no válida");
+    const datos = await respuesta.json();
+    datosCorrelacion = datos; 
+        dibujarGrafo(svg, datos);
+    pintarTopCorrelaciones(datos);
+    poblarSelectorShock(datos);
+    poblarBuscador(datos);
+    poblarSelectorCartera(datos);
+    pintarCartera();
+    aplicarFiltroCategorias();
+  } catch (error) {
+    svg.replaceChildren();
+    const texto = crearSVGEl("text", { x: 300, y: 300, "text-anchor": "middle", fill: "#9aa1ab", "font-size": "14" });
+    texto.textContent = "No se pudo calcular el mapa de correlaciones.";
+    svg.appendChild(texto);
+    document.getElementById("contagio-top").replaceChildren();
+  }
+}
+
+cargarCorrelaciones();
+setInterval(cargarCorrelaciones, 30 * 60 * 1000);
+
+let datosCorrelacion = null;
+
+function poblarSelectorShock(datos) {
+  const select = document.getElementById("shock-nodo");
+  if (select.options.length) return;   // no reordenar si el usuario ya eligió algo
+  select.replaceChildren(...datos.nodos.map((n) => {
+    const opcion = document.createElement("option");
+    opcion.value = n.id;
+    opcion.textContent = `${n.id} — ${n.nombre}`;
+    return opcion;
+  }));
+}
+
+function poblarBuscador(datos) {
+  const select = document.getElementById("buscador-nodo");
+  if (select.options.length > 1) return;   // ya poblado, no reordenar
+  datos.nodos.forEach((n) => {
+    const opcion = document.createElement("option");
+    opcion.value = n.id;
+    opcion.textContent = `${n.id} — ${n.nombre}`;
+    select.appendChild(opcion);
+  });
+}
+
+let signoShock = 1;
+document.querySelectorAll(".shock-signo").forEach((boton) => {
+  boton.addEventListener("click", () => {
+    document.querySelector(".shock-signo.activo").classList.remove("activo");
+    boton.classList.add("activo");
+    signoShock = Number(boton.dataset.signo);
+  });
+});
+
+const categoriasActivas = new Set(["economico", "politico", "social"]);
+let umbralCorrelacion = 0.4;
+
+function aplicarFiltroCategorias() {
+  const svg = document.getElementById("grafo-correlaciones");
+  if (!svg || !datosCorrelacion) return;
+
+  const categoriaPorId = {};
+  datosCorrelacion.nodos.forEach((n) => { categoriaPorId[n.id] = n.categoria || "economico"; });
+
+  svg.querySelectorAll(".nodo-correlacion").forEach((grupo) => {
+    const id = grupo.dataset.id;
+    const visible = id === "__cluster_acciones"
+      ? categoriasActivas.has("economico")
+      : categoriasActivas.has(categoriaPorId[id] || "economico");
+    grupo.classList.toggle("filtrado", !visible);
+  });
+
+  svg.querySelectorAll(".arista-correlacion").forEach((linea) => {
+    const catA = categoriaPorId[linea.dataset.a] || "economico";
+    const catB = categoriaPorId[linea.dataset.b] || "economico";
+    const pasaCategoria = categoriasActivas.has(catA) && categoriasActivas.has(catB);
+    const pasaUmbral = parseFloat(linea.dataset.valor || "0") >= umbralCorrelacion;
+    linea.classList.toggle("filtrada", !(pasaCategoria && pasaUmbral));
+  });
+
+  aplicarModoCartera();
+}
+
+document.querySelectorAll(".filtro-categoria").forEach((boton) => {
+  boton.addEventListener("click", () => {
+    const categoria = boton.dataset.categoria;
+    boton.classList.toggle("activo");
+    if (categoriasActivas.has(categoria)) categoriasActivas.delete(categoria);
+    else categoriasActivas.add(categoria);
+    aplicarFiltroCategorias();
+  });
+});
+
+document.getElementById("umbral-correlacion").addEventListener("input", (e) => {
+  umbralCorrelacion = Number(e.target.value);
+  document.getElementById("umbral-valor").textContent = umbralCorrelacion.toFixed(2);
+  aplicarFiltroCategorias();
+});
+
+function calcularPropagacion(origenId, signo, datos) {
+  const adyacencia = {};
+  datos.nodos.forEach((n) => { adyacencia[n.id] = {}; });
+  datos.pares.forEach((p) => {
+    adyacencia[p.a][p.b] = p.valor;
+    adyacencia[p.b][p.a] = p.valor;
+  });
+
+  const UMBRAL = 0.15, DECAY = 0.85, MAX_SALTOS = 3;
+  const impacto = { [origenId]: { valor: signo, salto: 0, padre: null } };
+  const cola = [origenId];
+
+  while (cola.length) {
+    const actualId = cola.shift();
+    const actual = impacto[actualId];
+    if (actual.salto >= MAX_SALTOS) continue;
+
+    for (const [vecinoId, corr] of Object.entries(adyacencia[actualId] || {})) {
+      if (impacto[vecinoId] || Math.abs(corr) < UMBRAL) continue;
+      impacto[vecinoId] = { valor: actual.valor * corr * DECAY, salto: actual.salto + 1, padre: actualId };
+      cola.push(vecinoId);
+    }
+  }
+  return impacto;
+}
+
+function limpiarShock(svg) {
+  svg.querySelectorAll(".nodo-correlacion").forEach((g) =>
+    g.classList.remove("shock-origen", "shock-positivo", "shock-negativo", "shock-neutro"));
+  svg.querySelectorAll(".arista-correlacion").forEach((l) =>
+    l.classList.remove("shock-camino", "shock-otras"));
+  document.getElementById("shock-resultado").textContent = "";
+}
+
+function animarShock(svg, origenId, impacto) {
+  limpiarShock(svg);
+  svg.querySelectorAll(".arista-correlacion").forEach((l) => l.classList.add("shock-otras"));
+
+  const porSalto = {};
+  Object.entries(impacto).forEach(([id, info]) => {
+    (porSalto[info.salto] ??= []).push({ id, ...info });
+  });
+
+  const maxSalto = Math.max(...Object.keys(porSalto).map(Number));
+  for (let salto = 0; salto <= maxSalto; salto++) {
+    setTimeout(() => {
+      (porSalto[salto] || []).forEach(({ id, valor, padre }) => {
+        const grupo = svg.querySelector(`.nodo-correlacion[data-id="${CSS.escape(id)}"]`);
+        if (!grupo) return;
+        if (id === origenId) {
+          grupo.classList.add("shock-origen", valor >= 0 ? "shock-positivo" : "shock-negativo");
+        } else {
+          grupo.classList.add(Math.abs(valor) < 0.03 ? "shock-neutro" : valor >= 0 ? "shock-positivo" : "shock-negativo");
+        }
+
+        if (padre) {
+          const arista = svg.querySelector(
+            `.arista-correlacion[data-a="${CSS.escape(padre)}"][data-b="${CSS.escape(id)}"], ` +
+            `.arista-correlacion[data-a="${CSS.escape(id)}"][data-b="${CSS.escape(padre)}"]`
+          );
+          arista?.classList.remove("shock-otras");
+          arista?.classList.add("shock-camino");
+        }
+      });
+    }, salto * 550);
+  }
+
+  setTimeout(() => pintarResumenShock(origenId, impacto), (maxSalto + 1) * 550);
+}
+
+function pintarResumenShock(origenId, impacto) {
+  const resultado = document.getElementById("shock-resultado");
+  const nombreOrigen = datosCorrelacion.nodos.find((n) => n.id === origenId)?.nombre || origenId;
+
+  const afectados = Object.entries(impacto)
+    .filter(([id]) => id !== origenId)
+    .sort(([, a], [, b]) => Math.abs(b.valor) - Math.abs(a.valor));
+
+  if (afectados.length === 0) {
+    resultado.textContent = `El shock en ${nombreOrigen} no encontró conexiones lo bastante fuertes para propagarse.`;
+    return;
+  }
+
+  const detalle = afectados
+    .slice(0, 6)
+    .map(([id, info]) => `${id} ${info.valor >= 0 ? "+" : ""}${(info.valor * 100).toFixed(1)}%`)
+    .join(" · ");
+
+  resultado.textContent = `Shock en ${nombreOrigen} propagado a ${afectados.length} nodo(s) en ${Math.max(...afectados.map(([, i]) => i.salto))} salto(s). ${detalle}`;
+}
+
+const ETIQUETAS_MACRO = {
+  pib: "Crecimiento del PIB",
+  inflacion: "Inflación",
+  desempleo: "Desempleo",
+  tasa_interes: "Tasa de interés real",
+};
+
+function mostrarResena(nodo) {
+  const panel = document.getElementById("resena-nodo");
+  const titulo = document.getElementById("resena-titulo");
+  const macroCaja = document.getElementById("resena-macro");
+  const lista = document.getElementById("resena-lista");
+
+  titulo.textContent = `Actualidad: ${nodo.nombre}`;
+
+    const favBoton = document.getElementById("resena-favorito");
+  favBoton.classList.toggle("activo", favoritos.has(nodo.id));
+  favBoton.textContent = favoritos.has(nodo.id) ? "★ En tu cartera" : "☆ Marcar en mi cartera";
+  favBoton.onclick = () => alternarFavorito(nodo);
+
+  if (nodo.macro) {
+    macroCaja.innerHTML = Object.entries(ETIQUETAS_MACRO)
+      .filter(([clave]) => nodo.macro[clave])
+      .map(([clave, etiqueta]) => {
+        const dato = nodo.macro[clave];
+        return `<div class="resena__stat"><span>${etiqueta} (${dato.anio})</span><strong>${dato.valor}%</strong></div>`;
+      }).join("");
+  } else {
+    macroCaja.innerHTML = "";
+  }
+
+  const claves = [nodo.nombre, nodo.id].filter(Boolean).map((c) => c.toLowerCase());
+  const relacionadas = ultimasNoticias.filter((n) =>
+    claves.some((clave) => n.titulo.toLowerCase().includes(clave))
+  );
+
+  if (relacionadas.length === 0) {
+    lista.innerHTML = '<p class="resena__vacio">Sin noticias específicas en este momento.</p>';
+  } else {
+    lista.replaceChildren(...relacionadas.slice(0, 4).map((n) => {
+      const item = document.createElement("div");
+      item.className = "resena__item";
+      item.innerHTML = `<a href="${n.url}" target="_blank" rel="noopener noreferrer">${n.titulo}</a>`;
+      return item;
+    }));
+  }
+
+  panel.classList.add("visible");
+}
+
+document.getElementById("resena-cerrar").addEventListener("click", () => {
+  document.getElementById("resena-nodo").classList.remove("visible");
+});
+
+document.getElementById("buscador-nodo").addEventListener("change", (e) => {
+  if (e.target.value) volarHaciaNodo(e.target.value);
+});
+
+document.getElementById("cartera-agregar").addEventListener("click", () => {
+  const id = document.getElementById("cartera-selector").value;
+  const monto = document.getElementById("cartera-monto").value;
+  if (!id || !monto) return;
+  cartera[id] = monto;
+  guardarCartera(cartera);
+  document.getElementById("cartera-monto").value = "";
+  pintarCartera();
+});
+
+document.getElementById("shock-boton").addEventListener("click", () => {
+  if (!datosCorrelacion) return;
+  const origenId = document.getElementById("shock-nodo").value;
+  const svg = document.getElementById("grafo-correlaciones");
+  const impacto = calcularPropagacion(origenId, signoShock, datosCorrelacion);
+
+  const idsAccion = new Set(datosCorrelacion.nodos.filter((n) => n.grupo === GRUPO_ACCIONES_ID).map((n) => n.id));
+  const afectaAcciones = Object.keys(impacto).some((id) => idsAccion.has(id));
+  if (afectaAcciones && !clusterExpandido) {
+    clusterExpandido = true;
+    dibujarGrafo(svg, datosCorrelacion);
+  }
+
+  animarShock(svg, origenId, impacto);
+});
+
+document.getElementById("shock-reset").addEventListener("click", () => {
+  limpiarShock(document.getElementById("grafo-correlaciones"));
+});
+
+function alternarFavorito(nodo) {
+  if (favoritos.has(nodo.id)) favoritos.delete(nodo.id);
+  else favoritos.add(nodo.id);
+  guardarFavoritos(favoritos);
+
+  const svg = document.getElementById("grafo-correlaciones");
+  dibujarGrafo(svg, datosCorrelacion);
+  aplicarFiltroCategorias();   // esto también redibuja el modo cartera (ver punto 8)
+  mostrarResena(nodo);
+}
+
+let modoCartera = false;
+document.getElementById("cartera-boton").addEventListener("click", () => {
+  modoCartera = !modoCartera;
+  document.getElementById("cartera-boton").classList.toggle("activo", modoCartera);
+  aplicarModoCartera();
+});
+
+function aplicarModoCartera() {
+  const svg = document.getElementById("grafo-correlaciones");
+  if (!svg || !datosCorrelacion) return;
+
+  if (!modoCartera || favoritos.size === 0) {
+    svg.querySelectorAll(".nodo-correlacion, .arista-correlacion").forEach((el) => el.classList.remove("fuera-cartera"));
+    return;
+  }
+
+  const idsAccion = new Set(datosCorrelacion.nodos.filter((n) => n.grupo === GRUPO_ACCIONES_ID).map((n) => n.id));
+  const relevantes = new Set(favoritos);
+  datosCorrelacion.pares.forEach((p) => {
+    if (favoritos.has(p.a)) relevantes.add(p.b);
+    if (favoritos.has(p.b)) relevantes.add(p.a);
+  });
+
+  svg.querySelectorAll(".nodo-correlacion").forEach((g) => {
+    const id = g.dataset.id;
+    const visible = id === "__cluster_acciones"
+      ? [...relevantes].some((r) => idsAccion.has(r))
+      : relevantes.has(id);
+    g.classList.toggle("fuera-cartera", !visible);
+  });
+
+  svg.querySelectorAll(".arista-correlacion").forEach((l) => {
+    l.classList.toggle("fuera-cartera", !(relevantes.has(l.dataset.a) && relevantes.has(l.dataset.b)));
+  });
+}
+
+let graficoSentimiento = null;
+const COLORES_SENTIMIENTO = ["#1256a0", "#c62828", "#0f8a4f", "#b8700a", "#6b3fa0", "#9c3f63"];
+
+async function cargarSentimiento() {
+  const aviso = document.getElementById("sentimiento-aviso");
+  try {
+    const respuesta = await fetch("/api/sentimiento");
+    if (!respuesta.ok) throw new Error("Respuesta no válida");
+    const series = await respuesta.json();
+
+    const fechas = [...new Set(Object.values(series).flatMap((s) => Object.keys(s)))].sort();
+    const nombres = Object.keys(series).filter((n) => Object.keys(series[n]).length >= 2);
+
+    if (fechas.length === 0 || nombres.length === 0) {
+      aviso.textContent = "Aún no hay suficiente histórico acumulado. Vuelve en unos días.";
+      return;
+    }
+    aviso.textContent = "";
+
+    graficoSentimiento?.destroy();
+    graficoSentimiento = new Chart(document.getElementById("grafico-sentimiento"), {
+      type: "line",
+      data: {
+        labels: fechas,
+        datasets: nombres.map((nombre, i) => ({
+          label: nombre,
+          data: fechas.map((f) => (f in series[nombre] ? series[nombre][f] : null)),
+          borderColor: COLORES_SENTIMIENTO[i % COLORES_SENTIMIENTO.length],
+          borderWidth: 2,
+          pointRadius: 0,
+          tension: 0.25,
+          spanGaps: true,
+        })),
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: "index", intersect: false },
+        plugins: { legend: { display: true, position: "bottom" } },
+        scales: {
+          x: { ticks: { maxTicksLimit: 6, maxRotation: 0 }, grid: { display: false } },
+          y: {
+            min: -1, max: 1,
+            ticks: { maxTicksLimit: 5 },
+            title: { display: true, text: "Negativo ← → Positivo" },
+          },
+        },
+      },
+    });
+  } catch (error) {
+    aviso.textContent = "No se pudo cargar la evolución del sentimiento.";
+  }
+}
+
+cargarBriefing();
+cargarColumnas();
+cargarMedios();
+cargarNoticias();
+cargarSentimiento();
+poblarSelectoresComparador();
+cargarAlertas();
+  cargar("6m");
+</script>  
+</body>
+</html>

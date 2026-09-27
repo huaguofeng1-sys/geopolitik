@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ articulo.titulo }} — G20.VIX</title>
+  <style>
+    body { font-family: Georgia, serif; max-width: 680px; margin: 3rem auto; padding: 0 1.25rem; color: #111827; line-height: 1.6; }
+    a.volver { font-family: system-ui, sans-serif; font-size: 0.85rem; color: #6b7280; text-decoration: none; }
+    h1 { font-size: 2rem; margin: 1rem 0 0.25rem; }
+    .bajada { font-size: 1.1rem; color: #4b5563; margin-bottom: 0.5rem; }
+    .fecha { font-family: system-ui, sans-serif; font-size: 0.8rem; color: #9ca3af; margin-bottom: 2rem; }
+  </style>
+</head>
+<body>
+  <a class="volver" href="/">← Volver a G20.VIX</a>
+  <h1>{{ articulo.titulo }}</h1>
+  <p class="bajada">{{ articulo.bajada }}</p>
+  <p class="fecha">{{ articulo.fecha }}</p>
+  {{ articulo.cuerpo_html | safe }}
+</body>
+</html>

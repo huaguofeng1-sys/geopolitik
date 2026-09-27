@@ -1,0 +1,10 @@
+{
+  "titulo": "La primera nota de G20.VIX",
+  "bajada": "Un artículo de prueba para ver cómo se ve el panel.",
+  "cuerpo_html": "<p>Este es el cuerpo del artículo de prueba.</p>",
+  "slug": "prueba",
+  "fecha": "22/09/2026 15:00",
+  "genero": "mujer",
+  "materia": "Metodología Cualitativa",
+  "autor": "Ada Gallegos"
+}

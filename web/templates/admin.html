@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — G20.VIX</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 560px; margin: 2.5rem auto; padding: 0 1rem 3rem; color: #111827; }
+    h1 { font-size: 1.3rem; margin: 2rem 0 1rem; }
+    h1:first-of-type { margin-top: 0; }
+
+    label { display: block; font-size: 0.85rem; font-weight: 600; margin: 0.9rem 0 0.3rem; }
+    input[type="text"], select, textarea {
+      width: 100%;
+      padding: 0.65rem 0.7rem;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font: inherit;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    textarea { min-height: 220px; resize: vertical; line-height: 1.5; }
+
+    .fila { display: flex; gap: 0.7rem; }
+    .fila > div { flex: 1; min-width: 0; }
+
+    button[type="submit"] {
+      width: 100%;
+      margin-top: 1.25rem;
+      padding: 0.8rem;
+      border: 0;
+      border-radius: 8px;
+      background: #111827;
+      color: #fff;
+      font: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button[type="submit"]:disabled { opacity: 0.5; }
+
+    #estado { margin-top: 0.75rem; font-size: 0.9rem; color: #555; }
+
+    ul { list-style: none; padding: 0; }
+    li { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.7rem 0; border-bottom: 1px solid #e3e6ea; }
+    li a { color: inherit; font-size: 0.95rem; }
+    li button.btn-eliminar {
+      background: none;
+      border: 1px solid #c62828;
+      color: #c62828;
+      border-radius: 6px;
+      padding: 0.35rem 0.7rem;
+      font: inherit;
+      font-size: 0.8rem;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Nuevo artículo</h1>
+  <form id="form-crear">
+    <label for="campo-titulo">Título</label>
+    <input type="text" id="campo-titulo" name="titulo" required>
+
+    <label for="campo-bajada">Bajada (resumen corto)</label>
+    <input type="text" id="campo-bajada" name="bajada">
+
+    <div class="fila">
+      <div>
+        <label for="campo-autor">Autor</label>
+        <input type="text" id="campo-autor" name="autor">
+      </div>
+      <div>
+        <label for="campo-genero">Avatar</label>
+        <select id="campo-genero" name="genero">
+          <option value="">Sin especificar</option>
+          <option value="hombre">Hombre</option>
+          <option value="mujer">Mujer</option>
+        </select>
+      </div>
+    </div>
+
+    <label for="campo-materia">Materia</label>
+    <input type="text" id="campo-materia" name="materia" placeholder="Ej: Geopolítica, Economía…">
+
+    <label for="campo-cuerpo">Texto del artículo</label>
+    <textarea id="campo-cuerpo" name="cuerpo" placeholder="Escribí el artículo acá. Dejá una línea en blanco entre párrafos." required></textarea>
+
+    <button type="submit">Publicar artículo</button>
+  </form>
+  <div id="estado"></div>
+
+  <h1>Artículos publicados</h1>
+  <ul id="lista-articulos">
+    {% for a in articulos %}
+    <li data-slug="{{ a.slug }}">
+      <a href="/articulos/{{ a.slug }}" target="_blank">{{ a.titulo }}</a>
+      <button type="button" class="btn-eliminar">Eliminar</button>
+    </li>
+    {% else %}
+    <li>Todavía no hay artículos.</li>
+    {% endfor %}
+  </ul>
+
+  <script>
+    const form = document.getElementById("form-crear");
+    const estado = document.getElementById("estado");
+    const lista = document.getElementById("lista-articulos");
+    const boton = form.querySelector("button[type=submit]");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      boton.disabled = true;
+      estado.textContent = "Publicando…";
+
+      try {
+        const respuesta = await fetch("/admin/crear", { method: "POST", body: new FormData(form) });
+        const resultado = await respuesta.json();
+        if (!respuesta.ok) throw new Error(resultado.error || "Error desconocido");
+
+        estado.textContent = `Listo: "${resultado.titulo}"`;
+
+        const vacio = lista.querySelector("li:only-child:not([data-slug])");
+        if (vacio) vacio.remove();
+
+        const item = document.createElement("li");
+        item.dataset.slug = resultado.slug;
+        item.innerHTML = `<a href="/articulos/${resultado.slug}" target="_blank">${resultado.titulo}</a>
+                           <button type="button" class="btn-eliminar">Eliminar</button>`;
+        lista.prepend(item);
+        form.reset();
+      } catch (error) {
+        estado.textContent = `Error: ${error.message}`;
+      } finally {
+        boton.disabled = false;
+      }
+    });
+
+    lista.addEventListener("click", async (e) => {
+      if (!e.target.matches(".btn-eliminar")) return;
+      const item = e.target.closest("li");
+      await fetch(`/admin/eliminar/${item.dataset.slug}`, { method: "POST" });
+      item.remove();
+    });
+  </script>
+</body>
+</html>
