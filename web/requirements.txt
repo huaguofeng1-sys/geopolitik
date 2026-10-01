@@ -1,0 +1,7 @@
+Flask
+requests
+anthropic
+gunicorn
+torch
+transformers
+scikit-learn
